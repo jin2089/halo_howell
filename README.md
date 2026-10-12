@@ -1,20 +1,17 @@
-# Earth
+# Howell Theme
 
-Halo 2.0 的默认主题。
+基于 [theme-earth](https://github.com/halo-dev/theme-earth) 定制的 Halo 2.0 个人博客主题。
 
-![Earth](./screenshot.jpg)
+![Howell Theme](./screenshot.jpg)
 
 ## 使用方式
 
-1. 手动从以下地址下载主题包并在 Console 的主题管理界面安装，安装方式可参考：<https://docs.halo.run/user-guide/themes>
-   - https://www.halo.run/store/apps/app-KgWqR
-   - https://github.com/halo-dev/theme-earth/releases
-
-2. 如果安装了[应用市场](https://www.halo.run/store/apps/app-VYJbF)插件，可以直接在应用市场中搜索`Earth`并安装。
+1. 手动下载主题包并在 Console 的主题管理界面安装，安装方式可参考：<https://docs.halo.run/user-guide/themes>
+2. 在后台「主题」设置中启用并进行个性化配置。
 
 ## 插件支持
 
-Earth 主题支持以下 Halo 插件：
+Howell Theme 支持以下 Halo 插件：
 
 - 友情链接（/links）：<https://www.halo.run/store/apps/app-hfbQg>
 - 图库（/photos）：<https://www.halo.run/store/apps/app-BmQJW>
@@ -28,11 +25,11 @@ Earth 主题支持以下 Halo 插件：
 ## 开发
 
 ```shell
-git clone git@github.com:halo-dev/theme-earth.git ~/halo2-dev/themes/theme-earth
+git clone https://github.com/jin2089/halo_howell.git ~/halo2-dev/themes/halo_howell
 ```
 
 ```shell
-cd ~/halo2-dev/themes/theme-earth
+cd ~/halo2-dev/themes/halo_howell
 ```
 
 ```shell
@@ -52,3 +49,7 @@ pnpm build
 ```
 
 然后将 `dist` 目录的 `ZIP` 格式压缩包在 Halo 后台上传安装即可。
+
+## 致谢
+
+基于 [Halo 官方主题 theme-earth](https://github.com/halo-dev/theme-earth)（MIT License）定制开发。
