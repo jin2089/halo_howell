@@ -1,29 +1,15 @@
 apiVersion: theme.halo.run/v1alpha1
 kind: Theme
 metadata:
-  name: theme-earth
-  annotations:
-    # Add supports for Halo App Store
-    # https://www.halo.run/store/apps/app-KgWqR
-    "store.halo.run/app-id": "app-KgWqR"
-    # 链接管理：https://www.halo.run/store/apps/app-hfbQg
-    # 图库管理：https://www.halo.run/store/apps/app-BmQJW
-    # 瞬间：https://www.halo.run/store/apps/app-SnwWD
-    # Shiki 代码高亮：https://www.halo.run/store/apps/app-kzloktzn
-    # lightgallery.js 灯箱：https://www.halo.run/store/apps/app-OoggD
-    "store.halo.run/recommended-apps": '["app-hfbQg", "app-BmQJW", "app-SnwWD", "app-kzloktzn", "app-OoggD"]'
+  name: halo_howell
 spec:
-  displayName: Earth
+  displayName: Howell Theme
   author:
-    name: Halo
-    website: https://www.halo.run
-  description: Default theme for Halo 2.0
+    name: howell
+  description: 基于 theme-earth 定制的个人博客主题
   logo: https://www.halo.run/logo
-  homepage: https://www.halo.run/store/apps/app-KgWqR
-  repo: https://github.com/halo-dev/theme-earth
-  issues: https://github.com/halo-dev/theme-earth/issues
-  settingName: "theme-earth-setting"
-  configMapName: "theme-earth-configMap"
+  settingName: "halo_howell-setting"
+  configMapName: "halo_howell-configMap"
   version: 1.18.0
   requires: ">=2.22.0"
   license:

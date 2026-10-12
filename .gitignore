@@ -27,3 +27,6 @@ build
 templates
 dist
 .vitest/
+
+tmp.md
+nul
