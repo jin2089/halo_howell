@@ -52,4 +52,4 @@ pnpm build
 
 ## 致谢
 
-基于 [Halo 官方主题 theme-earth](https://github.com/halo-dev/theme-earth)（MIT License）定制开发。
+基于 [Halo 官方主题 theme-earth](https://github.com/halo-dev/theme-earth)（GPL-3.0 License）定制开发。
