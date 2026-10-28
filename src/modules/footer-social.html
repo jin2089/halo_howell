@@ -10,16 +10,16 @@
         <div th:if="item.iconify == null" th:classappend="${item.icon}" class="size-5"></div>
         <th:block th:unless="item.iconify == null" th:utext="${item.iconify.value}"></th:block>
       </a>
-      <span
+      <image-lightbox
         th:if="${item.url_type == 'image'}"
-        th:attr="x-data=|{openImageModal:false,image: '${item.url}', alt: '${item.name}'}|"
+        th:attr="src=${item.url},alt=${item.name},data-close-label=#{fragment.lightbox.close}"
+        role="button"
+        tabindex="0"
         class="cursor-pointer text-gray-500 hover:text-gray-900 dark:hover:text-white [&>svg]:size-5"
-        @click="openImageModal = true"
       >
         <div th:if="item.iconify == null" th:classappend="${item.icon}" class="size-5"></div>
         <th:block th:unless="item.iconify == null" th:utext="${item.iconify.value}"></th:block>
-        <th:block th:replace="~{modules/image-view-modal}" />
-      </span>
+      </image-lightbox>
     </th:block>
   </div>
 </th:block>

@@ -2,6 +2,7 @@ import "./styles/tailwind.css";
 import "./styles/tokens.css";
 import "./styles/main.scss";
 import "./styles/pjax.scss";
+import "./styles/components.scss";
 import Alpine from "alpinejs";
 
 import accentHueSwitcher from "./alpine-data/accent-hue-switcher";
@@ -10,7 +11,7 @@ import dropdown from "./alpine-data/dropdown";
 import share from "./alpine-data/share";
 import uiPermission from "./alpine-data/ui-permission";
 import upvote from "./alpine-data/upvote";
-import "./components/number-formatter";
+import "./components";
 import "./utils/overlayscrollbars";
 import { onPageReady, registerRefresh, runPageRefreshes } from "./utils/page-ready";
 import { initPjax } from "./utils/pjax";
@@ -50,33 +51,8 @@ const onScroll = () => {
 
 window.addEventListener("scroll", onScroll);
 
-onPageReady(() => {
-  const scrollToTopButton = document.getElementById("btn-scroll-to-top");
-
-  if (!scrollToTopButton) {
-    return;
-  }
-
-  scrollToTopButton.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  window.addEventListener("scroll", _handleScroll);
-
-  function _handleScroll() {
-    if (!scrollToTopButton) {
-      return;
-    }
-
-    const isDown = window.scrollY > 300;
-
-    if (isDown) {
-      scrollToTopButton.style.opacity = "1";
-    } else {
-      scrollToTopButton.style.opacity = "0";
-    }
-  }
-});
+// 回到顶部按钮已改为 <back-to-top> 自定义元素：
+// 滚动监听、阈值判断与 prefers-reduced-motion 都由组件自己负责，并随 Pjax 换页清理。
 
 runPageRefreshes();
 

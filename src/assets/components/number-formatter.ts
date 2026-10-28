@@ -1,40 +1,39 @@
-export default class NumberFormatterElement extends HTMLElement {
-  static get observedAttributes() {
-    return ["value"];
+import { formatCompactNumber } from "./compact-number";
+import { defineElement } from "./define";
+
+/**
+ * 数字紧凑格式化：`10000` → `10K`（en）/ `1万`（zh）。
+ *
+ * 沿用原有的 Light DOM 写法，只更新文本内容，不需要额外样式。
+ */
+export class NumberFormatterElement extends HTMLElement {
+  static get observedAttributes(): string[] {
+    return ["value", "locale"];
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.render();
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(): void {
     this.render();
   }
 
-  render() {
+  render(): void {
     const value = this.getAttribute("value");
+
     if (value === null) {
       this.textContent = "0";
       return;
     }
 
-    const num = parseInt(value, 10);
-    if (isNaN(num)) {
-      this.textContent = value;
-      return;
-    }
-
-    this.textContent = this.formatNumber(num);
+    this.textContent = formatCompactNumber(value, this.locale());
   }
 
-  formatNumber(num: number): string {
-    const formatter = new Intl.NumberFormat("en-US", {
-      notation: "compact",
-      compactDisplay: "short",
-      maximumFractionDigits: 1,
-    });
-    return formatter.format(num);
+  /** 优先使用显式 locale 属性，其次跟随页面 `<html lang>`。 */
+  locale(): string {
+    return this.getAttribute("locale") ?? document.documentElement.lang ?? "";
   }
 }
 
-customElements.define("number-formatter", NumberFormatterElement);
+defineElement("number-formatter", NumberFormatterElement);

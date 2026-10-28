@@ -66,15 +66,15 @@
           <th:block th:utext="${social_media.icon.value}" />
         </a>
 
-        <span
+        <image-lightbox
           th:if="${social_media.url_type == 'image'}"
-          th:attr="x-data=|{openImageModal:false,image: '${social_media.url}', alt: '${social_media.name}'}|"
+          th:attr="src=${social_media.url},alt=${social_media.name},data-close-label=#{fragment.lightbox.close}"
+          role="button"
+          tabindex="0"
           class="inline-flex cursor-pointer items-center justify-center rounded p-1 text-gray-600 hover:bg-gray-100 dark:text-slate-400 dark:hover:bg-slate-700 [&>svg]:size-5"
-          @click="openImageModal = true"
         >
           <th:block th:utext="${social_media.icon.value}" />
-          <th:block th:replace="~{modules/image-view-modal}" />
-        </span>
+        </image-lightbox>
       </th:block>
     </div>
   </div>

@@ -1,0 +1,88 @@
+/*
+ * 自定义元素的补充样式。
+ * 这些组件走 Light DOM，因此本文件的规则可以直接命中它们；
+ * 颜色一律引用语义 token，跟随换色与暗色模式。
+ */
+
+/* 弹窗基座：重置 UA 默认的 border/padding，并在顶层居中 */
+.lightbox-dialog {
+  max-width: 92vw;
+  max-height: 92vh;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.lightbox-dialog::backdrop {
+  background-color: color-mix(in oklab, var(--bg-base) 45%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.lightbox-panel {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-media {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 0.5rem;
+  background-color: var(--bg-card);
+  object-fit: contain;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 40%);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -0.75rem;
+  right: -0.75rem;
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 9999px;
+  background-color: var(--bg-card);
+  color: var(--text-muted);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 25%);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.lightbox-close:hover {
+  color: var(--text-main);
+}
+
+.lightbox-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* 回到顶部：显隐状态由组件写入 data-visible，避免依赖工具类的产出顺序 */
+back-to-top {
+  opacity: 0;
+  visibility: hidden;
+}
+
+back-to-top[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+back-to-top[data-visible="true"]:hover {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-dialog::backdrop,
+  .lightbox-close {
+    transition: none;
+  }
+}
