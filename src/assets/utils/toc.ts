@@ -1,5 +1,17 @@
 import tocbot from "tocbot";
 
+/**
+ * Destroys the current tocbot instance. Call it before the DOM is replaced so that the
+ * document level scroll listeners do not pile up across Pjax navigations.
+ */
+export function destroyToc(): void {
+  try {
+    tocbot.destroy();
+  } catch (error) {
+    console.warn("[halo-theme] Failed to destroy the table of contents:", error);
+  }
+}
+
 export function generateToc(contentId: string, tocSelector: string, tocContainerSelector: string) {
   const content = document.getElementById(contentId);
   const titles = content?.querySelectorAll("h1, h2, h3, h4");

@@ -1,5 +1,6 @@
 import "./styles/tailwind.css";
 import "./styles/main.scss";
+import "./styles/pjax.scss";
 import Alpine from "alpinejs";
 
 import colorSchemeSwitcher from "./alpine-data/color-scheme-switcher";
@@ -9,6 +10,9 @@ import uiPermission from "./alpine-data/ui-permission";
 import upvote from "./alpine-data/upvote";
 import "./components/number-formatter";
 import "./utils/overlayscrollbars";
+import { onPageReady, registerRefresh, runPageRefreshes } from "./utils/page-ready";
+import { initPjax } from "./utils/pjax";
+import { destroyToc, generateToc } from "./utils/toc";
 
 window.Alpine = Alpine;
 
@@ -19,6 +23,18 @@ Alpine.data("share", share);
 Alpine.data("uiPermission", uiPermission);
 
 Alpine.start();
+
+// 目录（TOC）依赖替换后的 DOM，因此放进刷新注册表，而不是一次性脚本里。
+registerRefresh(() => {
+  if (document.getElementById("content") && document.querySelector(".toc")) {
+    generateToc("content", ".toc", ".toc-container");
+  }
+});
+
+// 离开文章页前先销毁上一份目录实例，避免滚动监听在 Pjax 多次导航后累积。
+document.addEventListener("pjax:before", () => {
+  destroyToc();
+});
 
 const onScroll = () => {
   const headerMenu = document.getElementById("header-menu");
@@ -31,7 +47,7 @@ const onScroll = () => {
 
 window.addEventListener("scroll", onScroll);
 
-document.addEventListener("DOMContentLoaded", () => {
+onPageReady(() => {
   const scrollToTopButton = document.getElementById("btn-scroll-to-top");
 
   if (!scrollToTopButton) {
@@ -58,3 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+runPageRefreshes();
+
+initPjax({ container: "#pjax-container" });

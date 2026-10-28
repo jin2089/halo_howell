@@ -1,5 +1,8 @@
 import pupa from "pupa";
 
+// 由构建产物的位置推导主题资源地址，避免主题重命名后手写 /themes/xxx 路径失效。
+const qrcodeShareUrl = new URL("./qrcode-share.html", import.meta.url).href;
+
 export default (shareIds: string[]) => ({
   permalink: window.location.href,
   title: document.title,
@@ -60,7 +63,7 @@ export default (shareIds: string[]) => ({
       name: window.i18nResources["jsModule.share.wechat"],
       icon: "i-simple-icons-wechat",
       type: "url",
-      url: `/themes/theme-earth/assets/qrcode-share.html?url={url}`,
+      url: `${qrcodeShareUrl}?url={url}`,
     },
     {
       id: "native",

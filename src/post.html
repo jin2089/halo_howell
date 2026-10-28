@@ -2,10 +2,6 @@
   <template name="head">
     <title th:text="|${post.spec.title} - ${site.title}|"></title>
     <script type="module" src="./assets/post.ts"></script>
-    <script type="module">
-      import { generateToc } from "./assets/utils/toc.ts";
-      generateToc("content", ".toc", ".toc-container");
-    </script>
   </template>
   <template name="hero">
     <section th:if="${theme.config.layout.content_header}" th:unless="${#strings.isEmpty(post.spec.cover)}">

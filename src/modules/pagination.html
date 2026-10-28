@@ -28,17 +28,26 @@
   </div>
 
   <script th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", () => {
-      const paginationSelect = document.getElementById("pagination");
+    (() => {
+      const initPagination = () => {
+        const paginationSelect = document.getElementById("pagination");
 
-      if (!paginationSelect) {
-        return;
+        if (!paginationSelect) {
+          return;
+        }
+
+        paginationSelect.addEventListener("change", (event) => {
+          const selectedPage = event.target.value;
+          window.location.href = `[(${context})]page/${selectedPage}`;
+        });
+      };
+
+      // Pjax 不会再次触发 DOMContentLoaded，因此已就绪时直接初始化。
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initPagination, { once: true });
+      } else {
+        initPagination();
       }
-
-      paginationSelect.addEventListener("change", (event) => {
-        const selectedPage = event.target.value;
-        window.location.href = `[(${context})]page/${selectedPage}`;
-      });
-    });
+    })();
   </script>
 </div>
