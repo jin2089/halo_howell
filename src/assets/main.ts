@@ -1,8 +1,10 @@
 import "./styles/tailwind.css";
+import "./styles/tokens.css";
 import "./styles/main.scss";
 import "./styles/pjax.scss";
 import Alpine from "alpinejs";
 
+import accentHueSwitcher from "./alpine-data/accent-hue-switcher";
 import colorSchemeSwitcher from "./alpine-data/color-scheme-switcher";
 import dropdown from "./alpine-data/dropdown";
 import share from "./alpine-data/share";
@@ -17,6 +19,7 @@ import { destroyToc, generateToc } from "./utils/toc";
 window.Alpine = Alpine;
 
 Alpine.data("dropdown", dropdown);
+Alpine.data("accentHueSwitcher", accentHueSwitcher);
 Alpine.data("colorSchemeSwitcher", colorSchemeSwitcher);
 Alpine.data("upvote", upvote);
 Alpine.data("share", share);

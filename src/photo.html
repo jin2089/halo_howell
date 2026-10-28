@@ -226,8 +226,8 @@
             <a
               th:each="neighbor : ${neighbors}"
               th:href="@{${photoUrl.detail(neighbor)}}"
-              class="relative shrink-0 overflow-hidden rounded-md transition-all hover:ring-2 hover:ring-blue-500"
-              th:classappend="${neighbor.metadata.name == photo.metadata.name} ? 'ring-2 ring-blue-500' : ''"
+              class="relative shrink-0 overflow-hidden rounded-md transition-all hover:ring-2 hover:ring-primary-500"
+              th:classappend="${neighbor.metadata.name == photo.metadata.name} ? 'ring-2 ring-primary-500' : ''"
             >
               <img
                 class="size-16 object-cover"

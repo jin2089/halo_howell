@@ -77,15 +77,15 @@
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
                 <div
-                  class="i-tabler-heart text-lg text-gray-600 group-hover:text-red-600 dark:text-slate-500"
+                  class="i-tabler-heart text-lg text-gray-600 group-hover:text-danger-600 dark:text-slate-500"
                   x-show="!upvoted(name)"
                   x-cloak
                 ></div>
-                <div class="i-tabler-heart-filled text-lg text-red-600" x-show="upvoted(name)" x-cloak></div>
+                <div class="i-tabler-heart-filled text-lg text-danger-600" x-show="upvoted(name)" x-cloak></div>
               </div>
               <span
                 th:attr="data-upvote-post-name=${post.metadata.name}"
-                class="text-sm text-gray-600 group-hover:text-red-600 dark:text-slate-500"
+                class="text-sm text-gray-600 group-hover:text-danger-600 dark:text-slate-500"
                 th:text="${post.stats?.upvote ?:0}"
               ></span>
             </div>
@@ -98,11 +98,11 @@
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
                 <div
-                  class="i-tabler-message-circle text-lg text-gray-600 group-hover:text-indigo-500 dark:text-slate-500"
+                  class="i-tabler-message-circle text-lg text-gray-600 group-hover:text-primary-500 dark:text-slate-500"
                 ></div>
               </div>
               <span
-                class="text-sm text-gray-600 group-hover:text-indigo-500 dark:text-slate-500"
+                class="text-sm text-gray-600 group-hover:text-primary-500 dark:text-slate-500"
                 th:text="${post.stats?.comment ?:0}"
               ></span>
             </a>
@@ -116,7 +116,9 @@
               <div
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
-                <div class="i-tabler-share text-lg text-gray-600 group-hover:text-green-500 dark:text-slate-500"></div>
+                <div
+                  class="i-tabler-share text-lg text-gray-600 group-hover:text-success-500 dark:text-slate-500"
+                ></div>
               </div>
               <th:block th:replace="~{modules/share-modal}" />
             </div>

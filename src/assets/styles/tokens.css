@@ -1,0 +1,76 @@
+/*
+ * 全站色彩系统的唯一真源：OKLCH + 色相变量。
+ * 说明：
+ * 1. 这里只用纯 CSS（不经 Sass），避免 Sass 改写 @property / 颜色函数。
+ * 2. --hue 注册后方可被 transition 插值，也才会被所有后代继承到。
+ * 3. 调色板层面的 slate/gray 映射见 tailwind.config.cjs，语义色见下方变量。
+ */
+
+@property --hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 250;
+}
+
+:root {
+  /* 色相：中性色与品牌色默认共用一个值 */
+  --hue: 250;
+  /* 品牌色相；如需与中性色错开，可在主题设置里另行覆盖 */
+  --accent-hue: var(--hue);
+  /* 中性色饱和度系数，只作用于 tailwind 的 slate/gray 色板 */
+  --neutral-chroma: 1;
+
+  /* 背景 */
+  --bg-base: oklch(98.4% 0.0034 var(--hue));
+  --bg-card: oklch(100% 0 0);
+  --bg-muted: oklch(96.8% 0.0069 var(--hue));
+  --bg-elevated: oklch(100% 0 0);
+
+  /* 文字 */
+  --text-main: oklch(20.8% 0.0398 var(--hue));
+  --text-muted: oklch(44.6% 0.0374 var(--hue));
+  --text-subtle: oklch(55.4% 0.0407 var(--hue));
+
+  /* 边框 */
+  --border-base: oklch(92.9% 0.0126 var(--hue));
+  --border-subtle: oklch(96.8% 0.0069 var(--hue));
+
+  /* 品牌色与状态色（取值与现有 blue-600 / red-600 / green-600 对齐） */
+  --primary: oklch(54.6% 0.2152 var(--accent-hue));
+  --primary-hover: oklch(48.8% 0.2172 var(--accent-hue));
+  --danger: oklch(57.7% 0.2152 27.3);
+  --success: oklch(62.7% 0.1699 149.2);
+}
+
+.dark {
+  /* 暗色下整体降饱和，避免高亮度配色产生"发光"感 */
+  --neutral-chroma: 0.8;
+
+  --bg-base: oklch(20.8% 0.0398 var(--hue));
+  --bg-card: oklch(27.9% 0.0368 var(--hue));
+  --bg-muted: oklch(37.2% 0.0392 var(--hue));
+  --bg-elevated: oklch(27.9% 0.0368 var(--hue));
+
+  --text-main: oklch(96.8% 0.0069 var(--hue));
+  --text-muted: oklch(71.1% 0.0351 var(--hue));
+  --text-subtle: oklch(55.4% 0.0407 var(--hue));
+
+  --border-base: oklch(37.2% 0.0392 var(--hue));
+  --border-subtle: oklch(27.9% 0.0368 var(--hue));
+
+  --primary: oklch(71.4% 0.1434 var(--accent-hue));
+  --primary-hover: oklch(80.9% 0.0956 var(--accent-hue));
+  --danger: oklch(71.1% 0.1661 22.2);
+  --success: oklch(72.3% 0.192 149.6);
+}
+
+/* 换色时的平滑过渡：只插值 --hue，依赖它的颜色由浏览器逐帧重算 */
+html {
+  transition: --hue 400ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
+}

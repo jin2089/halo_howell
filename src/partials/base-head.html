@@ -17,6 +17,31 @@
   };
   var colorScheme = /*[[${theme.config.style.color_scheme}]]*/ "system";
   var enableChangeColorScheme = /*[[${theme.config.style.enable_change_color_scheme}]]*/ false;
+  var defaultHue = /*[[${theme.config.style.accent_hue ?: 250}]]*/ 250;
+  var enableChangeHue = /*[[${theme.config.style.enable_change_hue}]]*/ true;
+</script>
+<script>
+  // 必须在首次绘制前落地 --hue，否则换过色相的访客会看到一次默认色闪烁。
+  (function () {
+    var fallback = Number(defaultHue);
+    var chosen = isFinite(fallback) ? fallback : 250;
+
+    try {
+      var raw = new URLSearchParams(window.location.search).get("hue");
+
+      if ((raw === null || raw === "") && enableChangeHue) {
+        raw = window.localStorage.getItem("theme-hue");
+      }
+
+      if (raw !== null && raw !== "" && isFinite(Number(raw))) {
+        chosen = Number(raw);
+      }
+    } catch (error) {
+      // 老浏览器或隐私模式下取不到存储时，退回主题配置的默认色相
+    }
+
+    document.documentElement.style.setProperty("--hue", String(((Math.round(chosen) % 360) + 360) % 360));
+  })();
 </script>
 <script type="module" src="@/assets/main.ts"></script>
 <script type="module">

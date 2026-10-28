@@ -55,7 +55,7 @@ body[data-pjax-loading]::before {
   inset: 0 0 auto;
   height: 2px;
   content: "";
-  background: rgb(59 130 246);
+  background: var(--primary);
   transform-origin: left center;
   animation: pjax-progress 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }

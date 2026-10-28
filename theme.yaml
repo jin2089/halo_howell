@@ -10,7 +10,7 @@ spec:
   logo: https://www.halo.run/logo
   settingName: "halo_howell-setting"
   configMapName: "halo_howell-configMap"
-  version: 1.18.0
+  version: 1.19.0
   requires: ">=2.22.0"
   license:
     - name: "GPL-3.0"

@@ -31,7 +31,7 @@
           @mouseleave="close()"
         >
           <a
-            class="text-gray-600 hover:text-blue-600 dark:text-slate-50 dark:hover:text-gray-300"
+            class="text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
             th:href="@{${menuItem.status.href}}"
             th:text="${menuItem.status.displayName}"
             th:target="${menuItem.spec.target?.value}"
@@ -55,7 +55,7 @@
               class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
             >
               <a
-                class="size-full truncate px-4 py-2 text-gray-600 hover:text-blue-600 dark:text-slate-50 dark:hover:text-gray-300"
+                class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
                 th:href="@{${childMenuItem.status.href}}"
                 th:text="${childMenuItem.status.displayName}"
                 th:target="${childMenuItem.spec.target?.value}"
@@ -68,7 +68,7 @@
     <div class="flex items-center">
       <ul x-data="colorSchemeSwitcher" class="flex items-center gap-4">
         <li class="sm:hidden" x-on:click="open = true">
-          <div class="i-tabler-menu-2 text-lg text-gray-600 hover:text-blue-600 dark:text-slate-100"></div>
+          <div class="i-tabler-menu-2 text-lg text-gray-600 hover:text-primary-600 dark:text-slate-100"></div>
         </li>
         <li
           th:if="${theme.config.style.enable_change_color_scheme}"
@@ -78,7 +78,7 @@
           @mouseleave="close()"
         >
           <div
-            class="cursor-pointer text-lg text-gray-600 transition-all hover:text-blue-600 dark:text-slate-100"
+            class="cursor-pointer text-lg text-gray-600 transition-all hover:text-primary-600 dark:text-slate-100"
             :class="colorScheme.icon"
           ></div>
           <ul
@@ -96,7 +96,7 @@
           >
             <template x-for="colorScheme in colorSchemes">
               <li
-                class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-blue-600 dark:text-slate-50 dark:hover:bg-slate-600 dark:hover:text-gray-300"
+                class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary-600 dark:text-slate-50 dark:hover:bg-slate-600 dark:hover:text-gray-300"
                 @click="setColorScheme(colorScheme.value,true)"
               >
                 <span :class="colorScheme.icon"></span>
@@ -105,12 +105,62 @@
             </template>
           </ul>
         </li>
+        <li
+          th:if="${theme.config.style.enable_change_hue}"
+          x-data="accentHueSwitcher"
+          class="relative"
+          @click.outside="open = false"
+        >
+          <div
+            class="cursor-pointer text-lg text-gray-600 transition-all hover:text-primary-600 dark:text-slate-100"
+            role="button"
+            tabindex="0"
+            th:title="#{fragment.header.accentHue}"
+            @click="open = !open"
+            @keydown.enter.prevent="open = !open"
+          >
+            <div class="i-tabler-palette"></div>
+          </div>
+          <div
+            x-show="open"
+            x-cloak
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute right-0 z-10 mt-2 w-48 rounded bg-white p-3 shadow dark:bg-slate-700"
+          >
+            <div
+              class="mb-2 text-xs font-medium text-gray-500 dark:text-slate-300"
+              th:text="#{fragment.header.accentHue}"
+            ></div>
+            <div class="flex items-center gap-2.5">
+              <template x-for="preset in presets" :key="preset.hue">
+                <button
+                  type="button"
+                  class="size-6 rounded-full border border-gray-200 transition-transform hover:scale-110 dark:border-slate-600"
+                  x-bind:style="preset.swatch"
+                  x-bind:class="
+                    activeHue === preset.hue
+                      ? 'ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-700'
+                      : ''
+                  "
+                  x-bind:title="preset.label"
+                  x-bind:aria-label="preset.label"
+                  @click="selectHue(preset.hue)"
+                ></button>
+              </template>
+            </div>
+          </div>
+        </li>
         <!-- https://github.com/halo-sigs/plugin-search-widget -->
         <li th:if="${pluginFinder.available('PluginSearchWidget')}">
           <a
             href="javascript:SearchWidget.open()"
             th:title="#{fragment.header.search}"
-            class="text-gray-600 hover:text-blue-600 dark:text-slate-100"
+            class="text-gray-600 hover:text-primary-600 dark:text-slate-100"
           >
             <div class="i-tabler-search text-lg"></div>
           </a>
@@ -123,7 +173,7 @@
           @mouseleave="close()"
         >
           <div>
-            <div class="size-5 text-gray-600 hover:text-blue-600 dark:text-slate-100">
+            <div class="size-5 text-gray-600 hover:text-primary-600 dark:text-slate-100">
               <img
                 class="size-5 rounded-full"
                 th:src="${currentUser.avatar ?: #theme.assets('/images/default-avatar.svg')}"
@@ -148,7 +198,7 @@
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-blue-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/console"
                   target="_blank"
                   th:text="#{fragment.header.console}"
@@ -160,7 +210,7 @@
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-blue-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/logout"
                   th:text="#{fragment.header.logout}"
                 >
@@ -171,7 +221,7 @@
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-blue-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/login"
                   onclick="this.href = '/login?redirect_uri=' + encodeURIComponent(window.location.href)"
                   th:text="#{fragment.header.login}"
@@ -242,6 +292,25 @@
           </li>
         </ul>
       </nav>
+      <div th:if="${theme.config.style.enable_change_hue}" x-data="accentHueSwitcher" class="mt-6">
+        <h2 class="text-sm font-medium text-gray-600 dark:text-slate-300" th:text="#{fragment.header.accentHue}"></h2>
+        <div class="mt-3 flex items-center gap-3">
+          <template x-for="preset in presets" :key="preset.hue">
+            <button
+              type="button"
+              class="size-7 rounded-full border border-gray-200 transition-transform hover:scale-110 dark:border-slate-600"
+              x-bind:style="preset.swatch"
+              x-bind:class="
+                activeHue === preset.hue
+                  ? 'ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900'
+                  : ''
+              "
+              x-bind:aria-label="preset.label"
+              @click="selectHue(preset.hue)"
+            ></button>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 </header>
