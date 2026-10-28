@@ -9,7 +9,7 @@
 
   <section class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[1fr_18rem] lg:px-6">
     <div class="z-0 min-w-0">
-      <div class="rounded-xl bg-white p-4 dark:bg-slate-800">
+      <div class="rounded-xl bg-surface-card p-4">
         <h1 class="mb-6 text-2xl font-medium dark:text-slate-50" th:text="#{page.archives.title}"></h1>
         <div class="flex flex-col gap-4">
           <th:block th:each="archive : ${archives.items}">
@@ -24,7 +24,7 @@
                 <div class="col-span-12 sm:col-span-9">
                   <th:block th:each="post : ${month.posts}">
                     <div
-                      class="my-2 rounded-xl border border-gray-300 bg-white shadow-sm hover:border-gray-400 hover:shadow dark:border-slate-600 dark:bg-slate-700 dark:hover:border-slate-700"
+                      class="my-2 rounded-xl border border-gray-300 bg-surface-elevated shadow-sm hover:border-gray-400 hover:shadow dark:border-slate-600 dark:hover:border-slate-700"
                     >
                       <div class="relative flex flex-col gap-2 p-4">
                         <div class="flex min-w-0 flex-wrap items-center justify-between gap-4">

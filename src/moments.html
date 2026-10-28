@@ -8,7 +8,7 @@
   </template>
   <section class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[1fr_18rem] lg:px-6">
     <div class="z-0 min-w-0">
-      <div class="rounded-xl bg-white p-4 dark:bg-slate-800">
+      <div class="rounded-xl bg-surface-card p-4">
         <h1
           class="mb-9 text-2xl font-medium dark:text-slate-50"
           th:text="${title ?: #messages.msg('page.moments.title')}"
@@ -112,14 +112,14 @@
                             <div class="flex min-h-full flex-col items-center justify-center p-4 text-center sm:p-0">
                               <div
                                 @click.outside="openVideoModal = false"
-                                class="relative my-4 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-xl"
+                                class="relative my-4 transform overflow-hidden rounded-lg bg-surface-card text-left shadow-xl transition-all sm:w-full sm:max-w-xl"
                               >
                                 <video th:src="${media.url}" class="w-full" controls></video>
                               </div>
                               <div>
                                 <div
                                   @click="openVideoModal = false"
-                                  class="group inline-flex items-center justify-center rounded-full bg-white p-1.5"
+                                  class="group inline-flex items-center justify-center rounded-full bg-surface-card p-1.5"
                                 >
                                   <i class="i-tabler-x block text-gray-600 group-hover:text-gray-900"></i>
                                 </div>

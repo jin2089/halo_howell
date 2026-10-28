@@ -1,5 +1,28 @@
 @import url("./github-markdown.css");
 
+/*
+ * 正文变量重绑：github-markdown.css 的下游规则全部走 var(--color-*)，
+ * 只有它的两组变量定义是写死的。本文件晚于该 @import，同特异性下后置胜出。
+ * .dark 版本必须单独列出：插件用 .dark .markdown-body（0,2,0）覆盖了亮色值。
+ */
+.markdown-body,
+.dark .markdown-body {
+  --color-canvas-default: var(--bg-card);
+  --color-canvas-subtle: var(--bg-muted);
+  --color-fg-default: var(--text-main);
+  --color-fg-muted: var(--text-muted);
+  --color-fg-subtle: var(--text-subtle);
+  --color-border-default: var(--border-base);
+  --color-border-muted: var(--border-subtle);
+  --color-accent-fg: var(--primary);
+  --color-accent-emphasis: var(--primary-hover);
+  --color-neutral-muted: var(--bg-muted);
+  --color-danger-fg: var(--danger);
+  --color-attention-fg: var(--warning);
+  --color-attention-subtle: var(--warning-subtle);
+  --color-done-fg: var(--success);
+}
+
 .markdown-body {
   background-color: transparent !important;
 
@@ -26,7 +49,7 @@
     padding: 0 !important;
 
     code {
-      border: 1px solid #fbf6f6;
+      border: 1px solid var(--border-subtle);
     }
   }
 
@@ -38,7 +61,7 @@
   }
 
   :not(pre) > code {
-    background-color: #afb8c133;
+    background-color: var(--bg-muted);
   }
 
   figure {

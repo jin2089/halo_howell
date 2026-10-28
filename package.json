@@ -6,6 +6,7 @@
     "build": "pnpm run build-only && pnpm package",
     "build-only": "vp build",
     "check": "vp check --fix",
+    "check:colors": "node scripts/check-colors.mjs",
     "package": "theme-package",
     "prepare": "vp config"
   },

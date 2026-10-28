@@ -1,6 +1,7 @@
 import Alpine from "alpinejs";
 
 import { runPageRefreshes } from "./page-ready";
+import { createPjaxCache, type PjaxCache } from "./pjax-cache";
 import {
   DEFAULT_SKIP_EXTENSIONS,
   DEFAULT_SKIP_PATHS,
@@ -8,6 +9,7 @@ import {
   type PjaxLinkContext,
   type PjaxLinkDescriptor,
 } from "./pjax-links";
+import { initPrefetch } from "./pjax-prefetch";
 
 export interface PjaxOptions {
   /** Selector of the element that gets replaced on navigation. */
@@ -18,6 +20,8 @@ export interface PjaxOptions {
   transitions?: boolean;
   /** Show the top loading bar while a navigation is in flight. */
   progress?: boolean;
+  /** Keep an in-memory LRU cache of responses and prefetch links on hover. */
+  cache?: boolean;
   /** Paths that always fall back to a full page load. */
   skipPaths?: RegExp[];
   /** File extensions that always fall back to a full page load. */
@@ -41,6 +45,7 @@ interface ResolvedPjaxOptions {
   timeout: number;
   transitions: boolean;
   progress: boolean;
+  cache: boolean;
   skipPaths: RegExp[];
   skipExtensions: RegExp;
 }
@@ -57,6 +62,9 @@ let pendingController: AbortController | null = null;
 let navigationId = 0;
 
 const loadedScriptSources = new Set<string>();
+
+let cacheStore: PjaxCache | null = null;
+let stopPrefetch: (() => void) | null = null;
 
 export function initPjax(userOptions: PjaxOptions = {}): void {
   if (initialized) {
@@ -76,14 +84,37 @@ export function initPjax(userOptions: PjaxOptions = {}): void {
   }
 
   initialized = true;
-  options = {
+  const resolvedOptions: ResolvedPjaxOptions = {
     container,
     timeout: userOptions.timeout ?? DEFAULT_TIMEOUT,
     transitions: userOptions.transitions ?? true,
     progress: userOptions.progress ?? true,
+    cache: userOptions.cache ?? true,
     skipPaths: userOptions.skipPaths ?? DEFAULT_SKIP_PATHS,
     skipExtensions: userOptions.skipExtensions ?? DEFAULT_SKIP_EXTENSIONS,
   };
+
+  options = resolvedOptions;
+  cacheStore = resolvedOptions.cache ? createPjaxCache() : null;
+
+  // Hover/focus prefetch warms the same cache the navigation reads from. ?no-prefetch opts out.
+  if (cacheStore && !new URLSearchParams(window.location.search).has("no-prefetch")) {
+    const cache = cacheStore;
+
+    stopPrefetch = initPrefetch({
+      cache,
+      isEligible: (url) =>
+        isEligibleNavigation(
+          { href: url, target: null, download: false, rel: "", disabled: false },
+          {
+            origin: window.location.origin,
+            currentHref: window.location.href,
+            skipPaths: resolvedOptions.skipPaths,
+            skipExtensions: resolvedOptions.skipExtensions,
+          },
+        ),
+    });
+  }
 
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
@@ -96,6 +127,9 @@ export function initPjax(userOptions: PjaxOptions = {}): void {
 
   document.addEventListener("click", handleClick);
   window.addEventListener("popstate", handlePopState);
+  window.addEventListener("pagehide", () => {
+    stopPrefetch?.();
+  });
 }
 
 function handleClick(event: MouseEvent): void {
@@ -173,17 +207,7 @@ async function navigate(url: string, mode: NavigateMode, restoreScrollY = 0): Pr
   let nextDocument: Document;
 
   try {
-    const response = await fetch(url, {
-      credentials: "same-origin",
-      headers: { Accept: "text/html,application/xhtml+xml" },
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    nextDocument = new DOMParser().parseFromString(await response.text(), "text/html");
+    nextDocument = await loadDocument(url, controller.signal);
   } catch {
     // A newer navigation already took over, nothing to do here.
     if (requestId !== navigationId) {
@@ -272,6 +296,38 @@ async function navigate(url: string, mode: NavigateMode, restoreScrollY = 0): Pr
   setLoading(false);
   dispatchPjaxEvent("pjax:success", { url });
   dispatchPjaxEvent("pjax:complete", { url });
+}
+
+/**
+ * Reads a page from the in-memory cache first and falls back to the network.
+ * Successful responses are cached so that back navigation and hovering stay instant.
+ */
+async function loadDocument(url: string, signal: AbortSignal): Promise<Document> {
+  const cached = cacheStore?.get(url);
+
+  if (cached) {
+    dispatchPjaxEvent("pjax:cache-hit", { url });
+    return new DOMParser().parseFromString(cached, "text/html");
+  }
+
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: { Accept: "text/html,application/xhtml+xml" },
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  const html = await response.text();
+
+  // 与预取保持同一标准：只缓存真正可替换的页面，避免把无容器的页面塞进缓存。
+  if (html.includes('id="pjax-container"')) {
+    cacheStore?.set(url, html);
+  }
+
+  return new DOMParser().parseFromString(html, "text/html");
 }
 
 function storeHistoryState(state: PjaxHistoryState): void {

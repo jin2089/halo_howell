@@ -2,6 +2,15 @@
   view-transition-name: site-header;
 }
 
+/*
+ * 列表首卡 → 详情页标题的共享元素过渡。
+ * view-transition-name 必须页内唯一，因此列表页只标记第一张卡（main.ts 运行时打标），
+ * 详情页则静态标注在 h1 上。
+ */
+.vt-post-title {
+  view-transition-name: post-title;
+}
+
 ::view-transition-old(site-header),
 ::view-transition-new(site-header) {
   animation: none;

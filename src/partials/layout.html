@@ -8,11 +8,14 @@
   <body class="hidden bg-slate-50 dark:bg-slate-900">
     <include src="header.html" />
 
-    <main id="pjax-container">
+    <main id="pjax-container" tabindex="-1" class="outline-none">
       <slot name="hero" />
 
       <slot />
     </main>
+
+    <!-- Pjax 换页后的标题播报：屏幕阅读器用户无法从视觉上感知内容已替换 -->
+    <div id="pjax-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
     <include src="footer.html" />
 

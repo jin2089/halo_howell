@@ -12,56 +12,65 @@
   initial-value: 250;
 }
 
+/*
+ * 语义 token 与 Tailwind 色板保持同一表达式：
+ * 同一 L/C 乘以同一个 --neutral-chroma 系数，才能做到"零视觉漂移"的互相替换。
+ */
 :root {
   /* 色相：中性色与品牌色默认共用一个值 */
   --hue: 250;
   /* 品牌色相；如需与中性色错开，可在主题设置里另行覆盖 */
   --accent-hue: var(--hue);
-  /* 中性色饱和度系数，只作用于 tailwind 的 slate/gray 色板 */
+  /* 中性色饱和度系数，同时作用于 token 与 slate/gray 色板 */
   --neutral-chroma: 1;
 
-  /* 背景 */
-  --bg-base: oklch(98.4% 0.0034 var(--hue));
-  --bg-card: oklch(100% 0 0);
-  --bg-muted: oklch(96.8% 0.0069 var(--hue));
-  --bg-elevated: oklch(100% 0 0);
+  /* 表面（由深到浅） */
+  --bg-base: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--hue));
+  --bg-card: oklch(100% 0 var(--hue));
+  --bg-elevated: oklch(100% 0 var(--hue));
+  --bg-muted: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
 
   /* 文字 */
-  --text-main: oklch(20.8% 0.0398 var(--hue));
-  --text-muted: oklch(44.6% 0.0374 var(--hue));
-  --text-subtle: oklch(55.4% 0.0407 var(--hue));
+  --text-main: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
+  --text-muted: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
+  --text-subtle: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
 
   /* 边框 */
-  --border-base: oklch(92.9% 0.0126 var(--hue));
-  --border-subtle: oklch(96.8% 0.0069 var(--hue));
+  --border-base: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--hue));
+  --border-subtle: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
 
   /* 品牌色与状态色（取值与现有 blue-600 / red-600 / green-600 对齐） */
   --primary: oklch(54.6% 0.2152 var(--accent-hue));
   --primary-hover: oklch(48.8% 0.2172 var(--accent-hue));
   --danger: oklch(57.7% 0.2152 27.3);
   --success: oklch(62.7% 0.1699 149.2);
+  /* 注意色：由 GitHub 的 #9a6700 / #fff8c5 精确换算，供正文告示块使用 */
+  --warning: oklch(55.4% 0.1169 75);
+  --warning-subtle: oklch(97.2% 0.0658 101);
 }
 
 .dark {
   /* 暗色下整体降饱和，避免高亮度配色产生"发光"感 */
   --neutral-chroma: 0.8;
 
-  --bg-base: oklch(20.8% 0.0398 var(--hue));
-  --bg-card: oklch(27.9% 0.0368 var(--hue));
-  --bg-muted: oklch(37.2% 0.0392 var(--hue));
-  --bg-elevated: oklch(27.9% 0.0368 var(--hue));
+  --bg-base: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
+  --bg-card: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
+  --bg-elevated: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
+  --bg-muted: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
 
-  --text-main: oklch(96.8% 0.0069 var(--hue));
-  --text-muted: oklch(71.1% 0.0351 var(--hue));
-  --text-subtle: oklch(55.4% 0.0407 var(--hue));
+  --text-main: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
+  --text-muted: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--hue));
+  --text-subtle: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
 
-  --border-base: oklch(37.2% 0.0392 var(--hue));
-  --border-subtle: oklch(27.9% 0.0368 var(--hue));
+  --border-base: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
+  --border-subtle: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
 
   --primary: oklch(71.4% 0.1434 var(--accent-hue));
   --primary-hover: oklch(80.9% 0.0956 var(--accent-hue));
   --danger: oklch(71.1% 0.1661 22.2);
   --success: oklch(72.3% 0.192 149.6);
+  --warning: oklch(72% 0.1401 79.9);
+  --warning-subtle: color-mix(in oklab, oklch(72% 0.14 80) 15%, var(--bg-card));
 }
 
 /* 换色时的平滑过渡：只插值 --hue，依赖它的颜色由浏览器逐帧重算 */
@@ -70,6 +79,28 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
+}
+
+/* 高对比度偏好：回到无色偏的纯灰，并加深边框 */
+@media (prefers-contrast: more) {
+  :root,
+  .dark {
+    --neutral-chroma: 0;
+  }
+}
+
+/* 打印时冻结色相：换过主题色的访客打印出来不应带色偏。
+   首屏脚本把 --hue 写在 <html> 行内样式上，因此必须用 !important 才能覆盖。 */
+@media print {
+  :root,
+  .dark {
+    --hue: 250 !important;
+    --accent-hue: 250 !important;
+  }
+
   html {
     transition: none;
   }

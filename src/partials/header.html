@@ -1,6 +1,6 @@
 <header
   id="header-menu"
-  class="sticky top-0 z-10 flex h-16 bg-white py-3 shadow-sm transition-all dark:bg-gray-800"
+  class="sticky top-0 z-10 flex h-16 bg-surface-card py-3 shadow-sm transition-all"
   x-data="{ open : false }"
   th:with="menu = ${menuFinder.getPrimary()}"
 >
@@ -48,7 +48,7 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="menu-dropdown absolute left-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-white shadow dark:divide-slate-600 dark:bg-slate-700"
+            class="menu-dropdown absolute left-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
           >
             <li
               th:each="childMenuItem : ${menuItem.children}"
@@ -92,7 +92,7 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-white shadow dark:divide-slate-600 dark:bg-slate-700"
+            class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
           >
             <template x-for="colorScheme in colorSchemes">
               <li
@@ -130,7 +130,7 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="absolute right-0 z-10 mt-2 w-48 rounded bg-white p-3 shadow dark:bg-slate-700"
+            class="absolute right-0 z-10 mt-2 w-48 rounded bg-surface-elevated p-3 shadow"
           >
             <div
               class="mb-2 text-xs font-medium text-gray-500 dark:text-slate-300"
@@ -191,7 +191,7 @@
               x-transition:leave="transition ease-in duration-75"
               x-transition:leave-start="transform opacity-100 scale-100"
               x-transition:leave-end="transform opacity-0 scale-95"
-              class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-white shadow dark:divide-slate-600 dark:bg-slate-700"
+              class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
             >
               <li
                 sec:authorize="isAuthenticated()"
@@ -248,7 +248,7 @@
       x-transition:leave-end="opacity-0"
     ></div>
     <div
-      class="fixed inset-x-4 top-8 z-50 origin-top scale-100 rounded-lg bg-white p-4 dark:bg-slate-900"
+      class="fixed inset-x-4 top-8 z-50 origin-top scale-100 rounded-lg bg-surface-card p-4"
       tabindex="-1"
       x-show="open"
       x-cloak

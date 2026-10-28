@@ -80,4 +80,28 @@ onPageReady(() => {
 
 runPageRefreshes();
 
+// 换页后把共享元素过渡的标记补到列表首卡标题上：
+// view-transition-name 必须页内唯一，因此只在列表页标记一张卡。
+const markSharedPostTitle = () => {
+  document.querySelector<HTMLElement>("#post-list > :first-child h1")?.classList.add("vt-post-title");
+};
+
+// 换页后移动焦点并播报新标题，否则屏幕阅读器用户感知不到内容已替换。
+// preventScroll 是必须的：否则焦点会把已恢复的滚动位置带偏。
+const announcePageChange = () => {
+  const announcer = document.getElementById("pjax-announcer");
+
+  if (announcer) {
+    announcer.textContent = document.title;
+  }
+
+  document.getElementById("pjax-container")?.focus({ preventScroll: true });
+
+  markSharedPostTitle();
+};
+
+document.addEventListener("pjax:success", announcePageChange);
+
+onPageReady(markSharedPostTitle);
+
 initPjax({ container: "#pjax-container" });
