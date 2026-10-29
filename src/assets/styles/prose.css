@@ -1,0 +1,5 @@
+@reference "./tailwind.css";
+
+.tailwind-typography {
+  @apply prose prose-base dark:prose-invert prose-pre:p-0 mt-4;
+}

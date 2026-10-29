@@ -2,13 +2,13 @@
   <div class="mt-6 flex items-center justify-between" th:if="${hasPrevious || hasNext}">
     <a
       th:href="@{${prevUrl}}"
-      class="whitespace-no-wrap group inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 bg-surface-elevated px-4 py-1 text-sm font-medium leading-6 text-gray-600 shadow-sm hover:bg-gray-50 focus:shadow-none focus:outline-none dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
+      class="group bg-surface-elevated inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 px-4 py-1 text-sm leading-6 font-medium whitespace-nowrap text-gray-600 shadow-xs hover:bg-gray-50 focus:shadow-none focus:outline-hidden dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
       th:classappend="${!hasPrevious ? 'pointer-events-none opacity-60' : ''}"
     >
       <span class="i-tabler-arrow-left text-lg transition-all group-hover:-translate-x-1"></span>
       <span th:text="#{common.previousPage}"></span>
     </a>
-    <select id="pagination" class="bg-transparent text-sm text-gray-900 outline-none dark:text-slate-50">
+    <select id="pagination" class="bg-transparent text-sm text-gray-900 outline-hidden dark:text-slate-50">
       <option
         th:each="i : ${#numbers.sequence(1,totalPages)}"
         th:selected="${i == page}"
@@ -19,7 +19,7 @@
     </select>
     <a
       th:href="@{${nextUrl}}"
-      class="whitespace-no-wrap group inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 bg-surface-elevated px-4 py-1 text-sm font-medium leading-6 text-gray-600 shadow-sm hover:bg-gray-50 focus:shadow-none focus:outline-none dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
+      class="group bg-surface-elevated inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 px-4 py-1 text-sm leading-6 font-medium whitespace-nowrap text-gray-600 shadow-xs hover:bg-gray-50 focus:shadow-none focus:outline-hidden dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
       th:classappend="${!hasNext ? 'pointer-events-none opacity-60' : ''}"
     >
       <span th:text="#{common.nextPage}"></span>

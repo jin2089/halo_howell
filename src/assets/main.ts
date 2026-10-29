@@ -1,8 +1,8 @@
 import "./styles/tailwind.css";
 import "./styles/tokens.css";
-import "./styles/main.scss";
-import "./styles/pjax.scss";
-import "./styles/components.scss";
+import "./styles/main.css";
+import "./styles/pjax.css";
+import "./styles/components.css";
 import Alpine from "alpinejs";
 
 import accentHueSwitcher from "./alpine-data/accent-hue-switcher";

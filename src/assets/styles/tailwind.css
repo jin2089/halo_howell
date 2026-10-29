@@ -1,3 +1,96 @@
-@tailwind base;
-@tailwind utilities;
-@tailwind components;
+/*
+ * Tailwind 4 入口。
+ * 色板迁移自原 tailwind.config.cjs：色相 / 饱和度仍由 tokens.css 的运行时变量驱动，
+ * 因此换色、暗色、高对比度与打印冻结逻辑保持不变。
+ */
+@import "tailwindcss" source(none);
+
+@source "../../../src";
+@source "../../../settings.yaml";
+
+@plugin "@tailwindcss/typography";
+@plugin "@egoist/tailwindcss-icons";
+
+/* 主题通过 <html class="dark"> 切换，而不是跟随系统 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* 中性色阶：L/C 取自 Tailwind slate 的 OKLCH 换算值，色相跟随 --hue */
+  --color-gray-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
+  --color-gray-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--hue));
+
+  --color-slate-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--hue));
+
+  /* 品牌色阶：色相由 --accent-hue 驱动，可与中性色错开 */
+  --color-primary-50: oklch(97% 0.0142 var(--accent-hue));
+  --color-primary-100: oklch(93.2% 0.0316 var(--accent-hue));
+  --color-primary-200: oklch(88.2% 0.0571 var(--accent-hue));
+  --color-primary-300: oklch(80.9% 0.0956 var(--accent-hue));
+  --color-primary-400: oklch(71.4% 0.1434 var(--accent-hue));
+  --color-primary-500: oklch(62.3% 0.188 var(--accent-hue));
+  --color-primary-600: oklch(54.6% 0.2152 var(--accent-hue));
+  --color-primary-700: oklch(48.8% 0.2172 var(--accent-hue));
+  --color-primary-800: oklch(42.4% 0.1809 var(--accent-hue));
+  --color-primary-900: oklch(37.9% 0.1378 var(--accent-hue));
+  --color-primary-950: oklch(28.2% 0.0874 var(--accent-hue));
+
+  /* 状态色：色相固定，不参与换色 */
+  --color-danger-400: oklch(71.1% 0.1661 22.2);
+  --color-danger-500: oklch(63.7% 0.2078 25.3);
+  --color-danger-600: oklch(57.7% 0.2152 27.3);
+  --color-danger-700: oklch(50.5% 0.1905 27.5);
+
+  --color-success-500: oklch(72.3% 0.192 149.6);
+  --color-success-600: oklch(62.7% 0.1699 149.2);
+
+  /* 语义别名：DEFAULT 指向 tokens.css 的语义变量，支持透明度修饰符 */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --color-surface-base: var(--bg-base);
+  --color-surface-card: var(--bg-card);
+  --color-surface-muted: var(--bg-muted);
+  --color-surface-elevated: var(--bg-elevated);
+
+  --color-content-main: var(--text-main);
+  --color-content-muted: var(--text-muted);
+  --color-content-subtle: var(--text-subtle);
+
+  --color-line-base: var(--border-base);
+  --color-line-subtle: var(--border-subtle);
+}
+
+/*
+ * Tailwind 4 的 Preflight 把默认边框色改为 currentColor；
+ * 这里恢复为语义边框色，等价于 v3 的 gray-200 默认值。
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border-base);
+  }
+}

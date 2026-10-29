@@ -1,1 +1,1 @@
-import "./styles/moment.scss";
+import "./styles/moment.css";

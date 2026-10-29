@@ -1,2 +1,2 @@
-import "./styles/prose.scss";
-import "./styles/markdown-body.scss";
+import "./styles/prose.css";
+import "./styles/markdown-body.css";

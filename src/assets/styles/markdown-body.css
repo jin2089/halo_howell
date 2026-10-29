@@ -1,5 +1,7 @@
 @import url("./github-markdown.css");
 
+@reference "./tailwind.css";
+
 /*
  * 正文变量重绑：github-markdown.css 的下游规则全部走 var(--color-*)，
  * 只有它的两组变量定义是写死的。本文件晚于该 @import，同特异性下后置胜出。
@@ -25,47 +27,46 @@
 
 .markdown-body {
   background-color: transparent !important;
-
   line-height: 1.75;
+}
 
-  ul {
-    list-style: disc;
-  }
+.markdown-body ul {
+  list-style: disc;
+}
 
-  ol {
-    list-style: decimal;
-  }
+.markdown-body ol {
+  list-style: decimal;
+}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    border: none !important;
-  }
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  border: none !important;
+}
 
-  pre {
-    padding: 0 !important;
+.markdown-body pre {
+  padding: 0 !important;
+}
 
-    code {
-      border: 1px solid var(--border-subtle);
-    }
-  }
+.markdown-body pre code {
+  border: 1px solid var(--border-subtle);
+}
 
-  p > img,
-  figure > img {
-    border-radius: 0.4rem;
-    overflow: hidden;
-    @apply shadow;
-  }
+.markdown-body p > img,
+.markdown-body figure > img {
+  border-radius: 0.4rem;
+  overflow: hidden;
+  @apply shadow-sm;
+}
 
-  :not(pre) > code {
-    background-color: var(--bg-muted);
-  }
+.markdown-body :not(pre) > code {
+  background-color: var(--bg-muted);
+}
 
-  figure {
-    margin-left: 0;
-    margin-right: 0;
-  }
+.markdown-body figure {
+  margin-left: 0;
+  margin-right: 0;
 }

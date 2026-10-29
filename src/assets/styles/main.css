@@ -1,3 +1,5 @@
+@reference "./tailwind.css";
+
 [x-cloak] {
   display: none !important;
 }
@@ -20,11 +22,11 @@ html {
 }
 
 .is-active-link {
-  @apply rounded bg-gray-100 dark:bg-slate-600;
+  @apply rounded-sm bg-gray-100 dark:bg-slate-600;
 }
 
 /* 正文排版跟随语义色：typography 插件把变量定义在 .prose 上，
-   因此必须写在晚于 tailwind.css 的样式文件里（main.scss 正好满足）。 */
+   因此必须写在晚于 tailwind.css 的样式文件里（main.css 正好满足）。 */
 .prose {
   --tw-prose-body: var(--text-main);
   --tw-prose-headings: var(--text-main);

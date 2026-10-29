@@ -47,7 +47,7 @@
   <th:block th:if="${theme.config.layout.content_header} and ${not #strings.isEmpty(cover)}">
     <div class="relative">
       <div
-        class="before:z-1 relative h-96 bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:bg-black/40"
+        class="relative h-96 bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:z-1 before:bg-black/40"
         th:style="|background-image: url('${cover}')|"
       ></div>
       <header

@@ -1,6 +1,6 @@
 <header
   id="header-menu"
-  class="sticky top-0 z-10 flex h-16 bg-surface-card py-3 shadow-sm transition-all"
+  class="bg-surface-card sticky top-0 z-10 flex h-16 py-3 shadow-xs transition-all"
   x-data="{ open : false }"
   th:with="menu = ${menuFinder.getPrimary()}"
 >
@@ -31,7 +31,7 @@
           @mouseleave="close()"
         >
           <a
-            class="text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
+            class="hover:text-primary-600 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
             th:href="@{${menuItem.status.href}}"
             th:text="${menuItem.status.displayName}"
             th:target="${menuItem.spec.target?.value}"
@@ -48,14 +48,14 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="menu-dropdown absolute left-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
+            class="menu-dropdown bg-surface-elevated absolute left-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded-sm shadow-sm dark:divide-slate-600"
           >
             <li
               th:each="childMenuItem : ${menuItem.children}"
               class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
             >
               <a
-                class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
+                class="hover:text-primary-600 size-full truncate px-4 py-2 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
                 th:href="@{${childMenuItem.status.href}}"
                 th:text="${childMenuItem.status.displayName}"
                 th:target="${childMenuItem.spec.target?.value}"
@@ -68,7 +68,7 @@
     <div class="flex items-center">
       <ul x-data="colorSchemeSwitcher" class="flex items-center gap-4">
         <li class="sm:hidden" x-on:click="open = true">
-          <div class="i-tabler-menu-2 text-lg text-gray-600 hover:text-primary-600 dark:text-slate-100"></div>
+          <div class="i-tabler-menu-2 hover:text-primary-600 text-lg text-gray-600 dark:text-slate-100"></div>
         </li>
         <li
           th:if="${theme.config.style.enable_change_color_scheme}"
@@ -78,7 +78,7 @@
           @mouseleave="close()"
         >
           <div
-            class="cursor-pointer text-lg text-gray-600 transition-all hover:text-primary-600 dark:text-slate-100"
+            class="hover:text-primary-600 cursor-pointer text-lg text-gray-600 transition-all dark:text-slate-100"
             :class="colorScheme.icon"
           ></div>
           <ul
@@ -92,11 +92,11 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
+            class="bg-surface-elevated absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded-sm shadow-sm dark:divide-slate-600"
           >
             <template x-for="colorScheme in colorSchemes">
               <li
-                class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary-600 dark:text-slate-50 dark:hover:bg-slate-600 dark:hover:text-gray-300"
+                class="hover:text-primary-600 flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:text-slate-50 dark:hover:bg-slate-600 dark:hover:text-gray-300"
                 @click="setColorScheme(colorScheme.value,true)"
               >
                 <span :class="colorScheme.icon"></span>
@@ -112,7 +112,7 @@
           @click.outside="open = false"
         >
           <div
-            class="cursor-pointer text-lg text-gray-600 transition-all hover:text-primary-600 dark:text-slate-100"
+            class="hover:text-primary-600 cursor-pointer text-lg text-gray-600 transition-all dark:text-slate-100"
             role="button"
             tabindex="0"
             th:title="#{fragment.header.accentHue}"
@@ -130,7 +130,7 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="absolute right-0 z-10 mt-2 w-48 rounded bg-surface-elevated p-3 shadow"
+            class="bg-surface-elevated absolute right-0 z-10 mt-2 w-48 rounded-sm p-3 shadow-sm"
           >
             <div
               class="mb-2 text-xs font-medium text-gray-500 dark:text-slate-300"
@@ -160,7 +160,7 @@
           <a
             href="javascript:SearchWidget.open()"
             th:title="#{fragment.header.search}"
-            class="text-gray-600 hover:text-primary-600 dark:text-slate-100"
+            class="hover:text-primary-600 text-gray-600 dark:text-slate-100"
           >
             <div class="i-tabler-search text-lg"></div>
           </a>
@@ -173,7 +173,7 @@
           @mouseleave="close()"
         >
           <div>
-            <div class="size-5 text-gray-600 hover:text-primary-600 dark:text-slate-100">
+            <div class="hover:text-primary-600 size-5 text-gray-600 dark:text-slate-100">
               <img
                 class="size-5 rounded-full"
                 th:src="${currentUser.avatar ?: #theme.assets('/images/default-avatar.svg')}"
@@ -191,14 +191,14 @@
               x-transition:leave="transition ease-in duration-75"
               x-transition:leave-start="transform opacity-100 scale-100"
               x-transition:leave-end="transform opacity-0 scale-95"
-              class="absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded bg-surface-elevated shadow dark:divide-slate-600"
+              class="bg-surface-elevated absolute right-0 z-10 mt-2 w-40 divide-y divide-gray-50 overflow-hidden rounded-sm shadow-sm dark:divide-slate-600"
             >
               <li
                 sec:authorize="isAuthenticated()"
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="hover:text-primary-600 size-full truncate px-4 py-2 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/console"
                   target="_blank"
                   th:text="#{fragment.header.console}"
@@ -210,7 +210,7 @@
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="hover:text-primary-600 size-full truncate px-4 py-2 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/logout"
                   th:text="#{fragment.header.logout}"
                 >
@@ -221,7 +221,7 @@
                 class="flex w-full items-center text-left text-sm hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 <a
-                  class="size-full truncate px-4 py-2 text-gray-600 hover:text-primary-600 dark:text-slate-50 dark:hover:text-gray-300"
+                  class="hover:text-primary-600 size-full truncate px-4 py-2 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
                   href="/login"
                   onclick="this.href = '/login?redirect_uri=' + encodeURIComponent(window.location.href)"
                   th:text="#{fragment.header.login}"
@@ -236,7 +236,7 @@
   </div>
   <div th:if="${menu != null} and ${not #lists.isEmpty(menu.menuItems)}">
     <div
-      class="fixed inset-0 z-50 bg-gray-800/40 opacity-100 backdrop-blur-sm dark:bg-black/80"
+      class="fixed inset-0 z-50 bg-gray-800/40 opacity-100 backdrop-blur-xs dark:bg-black/80"
       aria-hidden="true"
       x-show="open"
       x-cloak
@@ -248,7 +248,7 @@
       x-transition:leave-end="opacity-0"
     ></div>
     <div
-      class="fixed inset-x-4 top-8 z-50 origin-top scale-100 rounded-lg bg-surface-card p-4"
+      class="bg-surface-card fixed inset-x-4 top-8 z-50 origin-top scale-100 rounded-lg p-4"
       tabindex="-1"
       x-show="open"
       x-cloak

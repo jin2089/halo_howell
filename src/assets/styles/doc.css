@@ -1,0 +1,27 @@
+/* Custom styles for docsme plugin */
+.dm-layout,
+.dm-header__content,
+.dm-main-content {
+  margin-inline: auto !important;
+  max-width: 80rem !important;
+}
+
+.dm-header__content,
+.dm-main-content {
+  padding-inline: 1rem !important;
+}
+
+@media (min-width: 64rem) {
+  .dm-header__content,
+  .dm-main-content {
+    padding-inline: 1.5rem !important;
+  }
+}
+
+.dm-sidebar__content {
+  padding: 0 1rem !important;
+}
+
+.dm-header {
+  z-index: 9 !important;
+}

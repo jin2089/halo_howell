@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import { haloThemePlugin } from "@halo-dev/vite-plugin-halo-theme";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
@@ -16,7 +17,7 @@ export default defineConfig({
       "@": path.resolve(process.cwd(), "src"),
     },
   },
-  plugins: [haloThemePlugin()],
+  plugins: [tailwindcss(), haloThemePlugin()],
   build: {
     rolldownOptions: {
       output: {

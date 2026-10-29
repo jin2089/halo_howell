@@ -7,7 +7,7 @@
     <section th:if="${theme.config.layout.content_header}" th:unless="${#strings.isEmpty(post.spec.cover)}">
       <div class="relative flex items-center" th:styleappend="|height:${theme.config.post.cover_height ?: '24rem'}|">
         <div
-          class="before:z-1 relative size-full bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:bg-black/40"
+          class="relative size-full bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:z-1 before:bg-black/40"
           th:style="|background-image: url('${post.spec.cover}')|"
         ></div>
         <header
@@ -24,7 +24,7 @@
     th:classappend="${theme.config.layout.content_header} and ${not #strings.isEmpty(post.spec.cover)} ? '!-mt-20' : ''"
   >
     <div class="z-0 min-w-0">
-      <div x-data="upvote('post','content.halo.run','posts')" class="rounded-xl bg-surface-card p-4">
+      <div x-data="upvote('post','content.halo.run','posts')" class="bg-surface-card rounded-xl p-4">
         <div
           th:attr="x-data=|{name:'${post.metadata.name}'}|"
           class="flex flex-col items-center justify-between gap-2 sm:flex-row"
@@ -61,7 +61,7 @@
               <template x-if="shouldDisplay">
                 <a
                   th:href="|/console/posts/editor?name=${post.metadata.name}&returnToView=true|"
-                  class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md border border-gray-200 bg-surface-elevated px-4 py-1 text-sm font-medium leading-6 text-gray-600 shadow-sm hover:bg-gray-50 focus:shadow-none focus:outline-none dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
+                  class="bg-surface-elevated inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 px-4 py-1 text-sm leading-6 font-medium whitespace-nowrap text-gray-600 shadow-xs hover:bg-gray-50 focus:shadow-none focus:outline-hidden dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
                 >
                   <span class="i-tabler-edit text-lg transition-all group-hover:-translate-x-1"></span>
                   <span th:text="#{common.edit}"></span>
@@ -77,15 +77,15 @@
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
                 <div
-                  class="i-tabler-heart text-lg text-gray-600 group-hover:text-danger-600 dark:text-slate-500"
+                  class="i-tabler-heart group-hover:text-danger-600 text-lg text-gray-600 dark:text-slate-500"
                   x-show="!upvoted(name)"
                   x-cloak
                 ></div>
-                <div class="i-tabler-heart-filled text-lg text-danger-600" x-show="upvoted(name)" x-cloak></div>
+                <div class="i-tabler-heart-filled text-danger-600 text-lg" x-show="upvoted(name)" x-cloak></div>
               </div>
               <span
                 th:attr="data-upvote-post-name=${post.metadata.name}"
-                class="text-sm text-gray-600 group-hover:text-danger-600 dark:text-slate-500"
+                class="group-hover:text-danger-600 text-sm text-gray-600 dark:text-slate-500"
                 th:text="${post.stats?.upvote ?:0}"
               ></span>
             </div>
@@ -98,11 +98,11 @@
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
                 <div
-                  class="i-tabler-message-circle text-lg text-gray-600 group-hover:text-primary-500 dark:text-slate-500"
+                  class="i-tabler-message-circle group-hover:text-primary-500 text-lg text-gray-600 dark:text-slate-500"
                 ></div>
               </div>
               <span
-                class="text-sm text-gray-600 group-hover:text-primary-500 dark:text-slate-500"
+                class="group-hover:text-primary-500 text-sm text-gray-600 dark:text-slate-500"
                 th:text="${post.stats?.comment ?:0}"
               ></span>
             </a>
@@ -117,7 +117,7 @@
                 class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
               >
                 <div
-                  class="i-tabler-share text-lg text-gray-600 group-hover:text-success-500 dark:text-slate-500"
+                  class="i-tabler-share group-hover:text-success-500 text-lg text-gray-600 dark:text-slate-500"
                 ></div>
               </div>
               <th:block th:replace="~{modules/share-modal}" />
@@ -135,7 +135,7 @@
             th:href="@{${tag.status.permalink}}"
             th:title="${tag.spec.displayName}"
             th:text="|#${tag.spec.displayName}|"
-            class="cursor-pointer text-sm italic text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
+            class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
           >
           </a>
         </div>
@@ -188,7 +188,7 @@
     <th:block th:replace="~{modules/sidebar :: sidebar(prepend = ~{::sidebar_prepend})}">
       <th:block th:fragment="sidebar_prepend">
         <div
-          class="toc-container sticky top-20 z-[5] w-full cursor-pointer rounded-xl bg-surface-card p-3 shadow transition-all duration-500 hover:shadow-md"
+          class="toc-container bg-surface-card sticky top-20 z-[5] w-full cursor-pointer rounded-xl p-3 shadow-sm transition-all duration-500 hover:shadow-md"
         >
           <h2 class="inline-flex items-center gap-2 text-base dark:text-slate-50">
             <span class="i-tabler-list text-lg"></span>

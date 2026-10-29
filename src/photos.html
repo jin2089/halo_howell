@@ -9,7 +9,7 @@
 
   <section class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[1fr_18rem] lg:px-6">
     <div class="z-0 min-w-0">
-      <div class="rounded-xl bg-surface-card p-4">
+      <div class="bg-surface-card rounded-xl p-4">
         <h1
           class="mb-9 text-2xl font-medium dark:text-slate-50"
           th:text="${title ?: #messages.msg('page.photos.title')}"
@@ -20,7 +20,7 @@
             <nav class="flex flex-wrap gap-4" aria-label="Tabs">
               <a
                 th:href="@{/photos}"
-                class="rounded bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+                class="rounded-sm bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
                 th:classappend="${#lists.isEmpty(param.group) ? '!bg-gray-200 dark:!bg-slate-700 dark:!text-slate-100 ring-2 ring-gray-300 dark:ring-slate-600' : ''}"
               >
                 <span th:text="#{common.all}"></span>
@@ -28,7 +28,7 @@
               <a
                 th:each="group : ${photoFinder.groupBy()}"
                 th:href="@{|/photos?group=${group.metadata.name}|}"
-                class="rounded bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+                class="rounded-sm bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
                 th:classappend="${#lists.contains(param.group, group.metadata.name) ? '!bg-gray-200 dark:!bg-slate-700 dark:!text-slate-100 ring-2 ring-gray-300 dark:ring-slate-600' : ''}"
                 th:text="${group.spec.displayName}"
               >
@@ -59,7 +59,7 @@
             <nav class="flex flex-wrap gap-4" aria-label="Tabs">
               <a
                 th:href="@{${photoUrl.list()}}"
-                class="rounded bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+                class="rounded-sm bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
                 th:classappend="${#lists.isEmpty(param.group) ? '!bg-gray-200 dark:!bg-slate-700 dark:!text-slate-100 ring-2 ring-gray-300 dark:ring-slate-600' : ''}"
               >
                 <span th:text="#{common.all}"></span>
@@ -67,7 +67,7 @@
               <a
                 th:each="group : ${groups}"
                 th:href="@{${photoUrl.list(group.metadata.name)}}"
-                class="rounded bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+                class="rounded-sm bg-gray-100 px-1 py-0.5 text-sm text-gray-900 hover:bg-gray-200 dark:bg-slate-600 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-slate-100"
                 th:classappend="${#lists.contains(param.group, group.metadata.name) ? '!bg-gray-200 dark:!bg-slate-700 dark:!text-slate-100 ring-2 ring-gray-300 dark:ring-slate-600' : ''}"
                 th:text="${group.spec.displayName}"
               >
@@ -94,7 +94,7 @@
                 th:alt="${photo.spec.displayName}"
               />
               <div
-                class="absolute inset-x-0 bottom-0 rounded-b-lg bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                class="absolute inset-x-0 bottom-0 rounded-b-lg bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               >
                 <p
                   class="truncate text-sm font-medium text-white"

@@ -9,7 +9,7 @@ const prefersReducedMotion = (): boolean =>
 /**
  * 回到顶部：`<back-to-top>`。
  *
- * 显隐由组件自己维护（`data-visible`），样式写在 components.scss 里，
+ * 显隐由组件自己维护（`data-visible`），样式写在 components.css 里，
  * 这样不依赖 Tailwind 对 `opacity-100` 等类的生成顺序。
  *
  * Pjax 兼容要点：组件随页面换掉时 `disconnectedCallback` 会移除 window 监听、

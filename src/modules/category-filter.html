@@ -2,7 +2,7 @@
   <li>
     <a
       href="/"
-      class="inline-flex h-9 cursor-pointer items-center rounded px-3 font-medium text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 hover:shadow-sm dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-slate-50"
+      class="inline-flex h-9 cursor-pointer items-center rounded-sm px-3 font-medium text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 hover:shadow-xs dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-slate-50"
       th:classappend="${_templateId == 'index'} ? '!text-gray-900 !bg-gray-100 dark:!bg-slate-700 dark:!text-slate-50'"
     >
       <span class="truncate text-base" th:text="#{common.all}"> </span>
@@ -17,7 +17,7 @@
       th:each="categoryItem,categoryStat : ${categories}"
     >
       <div
-        class="group inline-flex h-9 cursor-pointer items-center gap-1 overflow-hidden rounded font-medium text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 hover:shadow-sm dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-slate-50"
+        class="group inline-flex h-9 cursor-pointer items-center gap-1 overflow-hidden rounded-sm font-medium text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 hover:shadow-xs dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-slate-50"
         th:classappend="(${category} and ${category.metadata.name == categoryItem.metadata.name}) or (not ${category} and ${categoryStat.index == 0} and ${_templateId == 'categories'}) ? '!text-gray-900 !bg-gray-100 dark:!bg-slate-700 dark:!text-slate-50'"
       >
         <a
@@ -51,7 +51,7 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute left-0 z-10 mt-2 w-60 overflow-hidden rounded bg-surface-card p-2 shadow"
+        class="bg-surface-card absolute left-0 z-10 mt-2 w-60 overflow-hidden rounded-sm p-2 shadow-sm"
       >
         <li th:replace="~{modules/category-tree :: single(categories=${categoryItem.children})}" />
       </ul>
