@@ -8,5 +8,6 @@ declare global {
     Alpine: Alpine;
     SearchWidget: any;
     i18nResources: Record<string, string>;
+    enableColorSchemeAnimation: boolean;
   }
 }

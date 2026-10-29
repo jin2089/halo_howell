@@ -1,0 +1,27 @@
+Howell Theme
+============
+
+This project is distributed under the GNU General Public License v3.0.
+See the LICENSE file for the full license text.
+
+Howell Theme is based on, and includes code and design references from,
+the following projects:
+
+1. theme-earth
+   Halo official theme
+   https://github.com/halo-dev/theme-earth
+   License: GPL-3.0
+
+2. theme-earthquake
+   Author: 风观
+   https://github.com/mufengyian/theme-earthquake
+   License: GPL-3.0
+
+The original copyright notices and license terms of these projects remain
+in effect. If you redistribute, modify, or publish a derivative of Howell
+Theme, you must retain this NOTICE and the LICENSE file, and comply with
+the GNU General Public License v3.0, including providing the corresponding
+source code.
+
+Source code for Howell Theme:
+https://github.com/jin2089/halo_howell

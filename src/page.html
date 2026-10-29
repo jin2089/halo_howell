@@ -26,81 +26,67 @@
   >
     <div class="z-0 min-w-0" th:classappend="${showSidebar ? '' : 'mx-auto w-full max-w-4xl'}">
       <div class="bg-surface-card rounded-xl p-4">
-        <div class="flex items-center justify-between">
-          <div class="inline-flex items-center justify-start gap-2">
-            <a
-              th:unless="${#strings.isEmpty(singlePage.owner.avatar)}"
-              th:href="@{${singlePage.owner.permalink}}"
-              th:title="${singlePage.owner.displayName}"
-            >
-              <img
-                th:src="${singlePage.owner.avatar}"
-                th:alt="${singlePage.owner.displayName}"
-                class="size-10 rounded-full"
-              />
-            </a>
-            <div class="flex flex-col gap-0.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h1
+            th:if="${#strings.isEmpty(singlePage.spec.cover)} or ${theme.config.post.title_position == 'content'} or ${not theme.config.layout.content_header}"
+            class="vt-post-title text-3xl font-bold break-all dark:text-slate-50"
+            th:text="${singlePage.spec.title}"
+          ></h1>
+          <div
+            sec:authorize="isAuthenticated()"
+            th:attr="x-data=|uiPermission('${#authentication.name}','system:singlepages:manage')|"
+            class="ml-auto flex items-center"
+            id="edit-button"
+          >
+            <template x-if="shouldDisplay">
               <a
-                th:href="@{${singlePage.owner.permalink}}"
-                class="text-sm font-semibold text-gray-900 hover:text-gray-600 dark:text-slate-100 dark:hover:text-slate-200"
-                th:text="${singlePage.owner.displayName}"
-                th:title="${singlePage.owner.displayName}"
-              ></a>
-              <div class="flex items-center gap-2 text-xs font-light text-gray-600 dark:text-slate-100">
-                <span
-                  th:text="#{common.publishedOn(${#dates.format(singlePage.spec.publishTime,'yyyy-MM-dd')})}"
-                ></span>
-                <span class="text-gray-300 dark:text-slate-200">/</span>
-                <span th:text="#{common.visitCount(${singlePage.stats?.visit ?:0})}"></span>
-              </div>
-            </div>
-          </div>
-          <div class="inline-flex flex-row gap-1">
-            <div
-              sec:authorize="isAuthenticated()"
-              th:attr="x-data=|uiPermission('${#authentication.name}','system:singlepages:manage')|"
-              class="flex items-center justify-between"
-              id="edit-button"
-            >
-              <template x-if="shouldDisplay">
-                <a
-                  th:href="|/console/single-pages/editor?name=${singlePage.metadata.name}&returnToView=true|"
-                  class="bg-surface-elevated inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 px-4 py-1 text-sm leading-6 font-medium whitespace-nowrap text-gray-600 shadow-xs hover:bg-gray-50 focus:shadow-none focus:outline-hidden dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
-                >
-                  <span class="i-tabler-edit text-lg transition-all group-hover:-translate-x-1"></span>
-                  <span th:text="#{common.edit}"></span>
-                </a>
-              </template>
-            </div>
-            <a
-              th:if="${haloCommentEnabled}"
-              href="#comment"
-              class="group inline-flex cursor-pointer items-center gap-0.5 rounded-lg"
-            >
-              <div
-                class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
+                th:href="|/console/single-pages/editor?name=${singlePage.metadata.name}&returnToView=true|"
+                th:aria-label="#{common.edit}"
+                th:title="#{common.edit}"
+                class="inline-flex size-9 items-center justify-center rounded-full text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
               >
-                <div
-                  class="i-tabler-message-circle group-hover:text-primary-500 text-lg text-gray-600 dark:text-slate-500"
-                ></div>
-              </div>
-              <span
-                class="group-hover:text-primary-500 text-sm text-gray-600 dark:text-slate-500"
-                th:text="${singlePage.stats?.comment ?:0}"
-              ></span>
-            </a>
-            <div th:if="${false}" class="cursor-pointer rounded-lg p-1 hover:bg-gray-100 dark:hover:bg-slate-600">
-              <div
-                class="i-tabler-share text-lg text-gray-600 hover:text-gray-900 dark:text-slate-100 dark:hover:text-slate-50"
-              ></div>
-            </div>
+                <span class="i-tabler-edit text-xl"></span>
+              </a>
+            </template>
           </div>
         </div>
-        <h1
-          th:if="${#strings.isEmpty(singlePage.spec.cover)} or ${theme.config.post.title_position == 'content'} or ${not theme.config.layout.content_header}"
-          class="vt-post-title my-3 text-3xl font-medium dark:text-slate-50"
-          th:text="${singlePage.spec.title}"
-        ></h1>
+
+        <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600 dark:text-slate-300">
+          <a
+            th:href="@{${singlePage.owner.permalink}}"
+            th:title="${singlePage.owner.displayName}"
+            class="inline-flex min-w-0 items-center gap-1.5 font-medium text-gray-800 transition-colors hover:text-gray-900 dark:text-slate-100 dark:hover:text-white"
+          >
+            <img
+              th:if="${not #strings.isEmpty(singlePage.owner.avatar)}"
+              th:src="${singlePage.owner.avatar}"
+              class="size-6 rounded-full"
+              th:alt="${singlePage.owner.displayName}"
+            />
+            <span class="truncate" th:text="${singlePage.owner.displayName}"></span>
+          </a>
+          <span
+            class="inline-flex items-center gap-1"
+            th:title="${#dates.format(singlePage.spec.publishTime,'yyyy-MM-dd')}"
+          >
+            <span class="i-tabler-calendar text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <span th:text="#{common.publishedOn(${#dates.format(singlePage.spec.publishTime,'yyyy-MM-dd')})}"></span>
+          </span>
+          <span class="inline-flex items-center gap-1">
+            <span class="i-tabler-eye text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <span th:text="#{common.visitCount(${singlePage.stats?.visit ?:0})}"></span>
+          </span>
+          <a
+            th:if="${haloCommentEnabled}"
+            href="#comment"
+            th:aria-label="#{common.comment}"
+            th:title="#{common.comment}"
+            class="hover:text-primary-500 dark:hover:text-primary-400 inline-flex items-center gap-1 transition-colors"
+          >
+            <span class="i-tabler-message-circle text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <span th:text="${singlePage.stats?.comment ?: 0}"></span>
+          </a>
+        </div>
 
         <image-gallery
           data-gallery-content

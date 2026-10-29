@@ -7,7 +7,7 @@
     "build-only": "vp build",
     "check": "vp check --fix",
     "check:colors": "node scripts/check-colors.mjs",
-    "package": "theme-package",
+    "package": "node scripts/copy-notice.mjs && theme-package",
     "prepare": "vp config"
   },
   "dependencies": {

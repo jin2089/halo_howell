@@ -6,11 +6,11 @@ spec:
   displayName: Howell Theme
   author:
     name: howell
-  description: 基于 theme-earth 定制的个人博客主题
+  description: 基于 theme-earth 定制，并参考 theme-earthquake 视觉与交互的个人博客主题
   logo: https://www.halo.run/logo
   settingName: "halo_howell-setting"
   configMapName: "halo_howell-configMap"
-  version: 1.21.0
+  version: 1.22.0
   requires: ">=2.22.0"
   license:
     - name: "GPL-3.0"

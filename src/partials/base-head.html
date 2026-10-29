@@ -3,6 +3,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
 <link th:unless="${#strings.isEmpty(site.logo)}" rel="preload" th:href="${site.logo}" as="image" />
 
+<meta
+  th:if="${(theme.config.style.color_scheme ?: 'system') != 'light'}"
+  name="theme-color"
+  media="(prefers-color-scheme: dark)"
+  content="#161618"
+/>
+<meta
+  th:if="${(theme.config.style.color_scheme ?: 'system') != 'dark'}"
+  name="theme-color"
+  media="(prefers-color-scheme: light)"
+  content="#fcfcfd"
+/>
+
+<th:block
+  th:with="entry = ${post != null ? post : singlePage},
+            entryTitle = ${post?.spec?.title ?: singlePage?.spec?.title ?: site.title},
+            entryDescription = ${post?.status?.excerpt ?: singlePage?.status?.excerpt ?: site.subtitle ?: ''},
+            entryCover = ${post?.spec?.cover ?: singlePage?.spec?.cover ?: site.logo ?: ''},
+            entryPermalink = ${post?.status?.permalink ?: singlePage?.status?.permalink ?: ''},
+            entryImage = ${!#strings.isEmpty(entryCover) ? (#strings.startsWith(entryCover, 'http') ? entryCover : site.url + entryCover) : ''},
+            entryUrl = ${!#strings.isEmpty(entryPermalink) ? (#strings.startsWith(entryPermalink, 'http') ? entryPermalink : site.url + entryPermalink) : site.url}"
+>
+  <th:block th:if="${theme.config.seo?.enable_og}">
+    <meta property="og:site_name" th:content="${site.title}" />
+    <meta property="og:title" th:content="${entryTitle}" />
+    <meta property="og:description" th:content="${entryDescription}" />
+    <meta property="og:image" th:unless="${#strings.isEmpty(entryImage)}" th:content="${entryImage}" />
+    <meta property="og:type" th:content="${entry != null ? 'article' : 'website'}" />
+    <meta property="og:url" th:content="${entryUrl}" />
+    <meta
+      th:if="${entry?.spec?.publishTime != null}"
+      property="article:published_time"
+      th:content="${#temporals.format(entry.spec.publishTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')}"
+    />
+    <meta
+      th:if="${entry?.status?.lastModifyTime != null and (entry?.spec?.publishTime == null or !#strings.equals(#temporals.format(entry.spec.publishTime, 'yyyy-MM-dd''T''HH:mm:ssXXX'), #temporals.format(entry.status.lastModifyTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')))}"
+      property="article:modified_time"
+      th:content="${#temporals.format(entry.status.lastModifyTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')}"
+    />
+  </th:block>
+
+  <th:block th:if="${theme.config.seo?.enable_twitter_card}">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" th:content="${entryTitle}" />
+    <meta name="twitter:description" th:content="${entryDescription}" />
+    <meta name="twitter:image" th:unless="${#strings.isEmpty(entryImage)}" th:content="${entryImage}" />
+  </th:block>
+
+  <th:block th:if="${theme.config.seo?.enable_canonical}">
+    <link th:if="${!#strings.isEmpty(entryPermalink)}" rel="canonical" th:href="${entryUrl}" />
+  </th:block>
+
+  <th:block th:if="${theme.config.seo?.enable_json_ld and post != null}">
+    <script type="application/ld+json" th:inline="javascript">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": [[${post.spec.title}]],
+        "datePublished": [[${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')}]],
+        "dateModified": [[${post.status?.lastModifyTime != null and !#strings.equals(#temporals.format(post.spec.publishTime, 'yyyy-MM-dd''T''HH:mm:ssXXX'), #temporals.format(post.status.lastModifyTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')) ? #temporals.format(post.status.lastModifyTime, 'yyyy-MM-dd''T''HH:mm:ssXXX') : #temporals.format(post.spec.publishTime, 'yyyy-MM-dd''T''HH:mm:ssXXX')}]],
+        "author": {
+          "@type": "Person",
+          "name": [[${post.owner?.displayName ?: site.title}]]
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": [[${site.title}]]
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": [[${site.url + post.status.permalink}]]
+        },
+        "image": [[${!#strings.isEmpty(post.spec.cover) ? (#strings.startsWith(post.spec.cover, 'http') ? post.spec.cover : site.url + post.spec.cover) : null}]],
+        "description": [[${post.status?.excerpt ?: ''}]]
+      }
+    </script>
+  </th:block>
+</th:block>
+
 <link
   th:if="${(theme.config.style.font_family ?: 'system') != 'system'}"
   rel="preconnect"
@@ -137,6 +216,7 @@
   var enableChangeColorScheme = /*[[${theme.config.style.enable_change_color_scheme}]]*/ false;
   var defaultHue = /*[[${theme.config.style.accent_hue ?: 250}]]*/ 250;
   var enableChangeHue = /*[[${theme.config.style.enable_change_hue}]]*/ true;
+  window.enableColorSchemeAnimation = /*[[${theme.config.style.enable_color_scheme_animation ?: false}]]*/ false;
 </script>
 <script>
   // 必须在首次绘制前落地 --hue，否则换过色相的访客会看到一次默认色闪烁。

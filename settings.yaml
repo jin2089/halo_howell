@@ -181,6 +181,12 @@ spec:
           label: 允许访客切换配色
           value: true
 
+        - $formkit: checkbox
+          name: enable_color_scheme_animation
+          label: 切换配色动画
+          value: false
+          help: 开启后切换配色时显示从点击位置扩散的圆形动画；系统开启「减少动态效果」时自动禁用。
+
         - $formkit: select
           name: accent_hue
           label: 默认主题色相
@@ -582,6 +588,8 @@ spec:
               value: style_1
             - label: 风格二
               value: style_2
+            - label: 自定义内容
+              value: items
 
         - $formkit: attachment
           name: logo
@@ -707,11 +715,123 @@ spec:
                   value: i-simple-icons-gitlab
                 - label: RSS（simple-icons:rss）
                   value: i-simple-icons-rss
+        - $formkit: array
+          if: "$get(style).value === 'items'"
+          name: footer_items
+          label: 页脚内容
+          help: 仅在「自定义内容」风格下生效，可按需增删和排序。
+          value:
+            - value: copyright
+            - value: powered_by
+            - value: halo_footer
+          itemLabels:
+            - type: "text"
+              label: "$value.value"
+          children:
+            - $formkit: select
+              name: value
+              key: footer_item_value
+              label: 内容
+              options:
+                - label: 版权信息
+                  value: copyright
+                - label: 架构信息
+                  value: powered_by
+                - label: Halo 页脚扩展
+                  value: halo_footer
+                - label: ICP 备案
+                  value: icp
+                - label: 公安联网备案
+                  value: gongan
+                - label: 社交媒体
+                  value: social_media
+            - $formkit: group
+              if: "$value.value === 'icp'"
+              name: options
+              key: icp-options
+              label: ICP 备案设置
+              children:
+                - $formkit: text
+                  name: text
+                  label: ICP 备案号
+            - $formkit: group
+              if: "$value.value === 'gongan'"
+              name: options
+              key: gongan-options
+              label: 公安联网备案设置
+              children:
+                - $formkit: text
+                  name: text
+                  label: 公安联网备案号
+            - $formkit: group
+              if: "$value.value === 'social_media'"
+              name: options
+              key: social-options
+              label: 社交媒体
+              children:
+                - $formkit: array
+                  name: items
+                  label: 链接
+                  value: []
+                  itemLabels:
+                    - type: "iconify"
+                      label: "$value.iconify"
+                    - type: "text"
+                      label: "$value.name"
+                    - type: "text"
+                      label: "$value.url"
+                  children:
+                    - $formkit: iconify
+                      name: iconify
+                      label: 图标
+                      format: svg
+                      validation: "required"
+                    - $formkit: text
+                      name: name
+                      label: 名称
+                    - $formkit: text
+                      name: url
+                      label: 链接
+                      validation: "required"
+                    - $formkit: select
+                      name: url_type
+                      label: 链接类型
+                      value: normal
+                      help: "如果选择了图片类型，那么在访客点击之后会使用弹框的形式加载"
+                      options:
+                        - label: 跳转链接
+                          value: normal
+                        - label: 图片
+                          value: image
         - $formkit: code
           label: 自定义版权信息
           name: custom_copyright
           language: html
           help: "如果不设置，将使用默认的版权信息，支持 HTML 代码"
+    - group: seo
+      label: SEO
+      formSchema:
+        - $formkit: checkbox
+          name: enable_og
+          label: Open Graph 标签
+          value: false
+          help: 启用后输出 og:title / og:description / og:image / og:url 等标签。如果已安装「SEO 工具集」插件，建议关闭以避免重复。
+        - $formkit: checkbox
+          name: enable_twitter_card
+          label: Twitter Card 标签
+          value: false
+          help: 启用后输出 twitter:card / twitter:title / twitter:description / twitter:image 标签。
+        - $formkit: checkbox
+          name: enable_canonical
+          label: Canonical URL
+          value: false
+          help: 启用后输出 link rel="canonical" 标签，帮助搜索引擎识别规范链接。
+        - $formkit: checkbox
+          name: enable_json_ld
+          label: JSON-LD 结构化数据
+          value: false
+          help: 启用后为文章页输出 BlogPosting 类型的 JSON-LD 结构化数据。如果已安装「SEO 工具集」插件，建议关闭以避免重复。
+
     - group: beian
       label: 备案设置
       formSchema:

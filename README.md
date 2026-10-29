@@ -1,8 +1,19 @@
 # Howell Theme
 
-基于 [theme-earth](https://github.com/halo-dev/theme-earth) 定制的 Halo 2.0 个人博客主题。
+基于 [theme-earth](https://github.com/halo-dev/theme-earth) 定制，并参考 [theme-earthquake](https://github.com/mufengyian/theme-earthquake) 视觉与交互的 Halo 2.0 个人博客主题。
 
 ![Howell Theme](./screenshot.jpg)
+
+## 功能
+
+- OKLCH 色彩系统、12 套主题预设与可调主题色相
+- 亮/暗配色切换，可选圆形扩散动画
+- 毛玻璃导航栏、阅读进度条与 Pjax 无刷新导航
+- 文章目录四态、文章显示项与上一篇/下一篇范围配置
+- 文章卡片显示项、侧栏开关与图片预览
+- 图库 EXIF、键盘操作与焦点管理
+- Open Graph、Twitter Card、Canonical 与 JSON-LD SEO 输出
+- 经典页脚与可排序的自定义页脚内容
 
 ## 使用方式
 
@@ -52,4 +63,9 @@ pnpm build
 
 ## 致谢
 
-基于 [Halo 官方主题 theme-earth](https://github.com/halo-dev/theme-earth)（GPL-3.0 License）定制开发。
+本项目基于以下 GPL-3.0 项目开发，完整归属信息见 [NOTICE](./NOTICE)：
+
+- [Halo 官方主题 theme-earth](https://github.com/halo-dev/theme-earth)
+- [theme-earthquake](https://github.com/mufengyian/theme-earthquake)，作者：风观
+
+如果你分发本主题，请保留 `LICENSE`、`NOTICE` 及源码中的版权声明，并继续遵守 GPL-3.0 License。

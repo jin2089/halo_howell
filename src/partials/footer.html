@@ -177,6 +177,78 @@
   </div>
 </footer>
 
+<footer
+  th:if="${theme.config.footer.style == 'items' and not #lists.isEmpty(theme.config.footer.footer_items)}"
+  class="bg-surface-card mt-10 py-8"
+>
+  <div class="mx-auto max-w-7xl px-4 lg:px-6">
+    <div class="space-y-2 text-center text-sm text-gray-500 dark:text-slate-300">
+      <th:block th:each="item : ${theme.config.footer.footer_items}">
+        <th:block th:if="${item.value == 'social_media'}">
+          <th:block th:replace="~{modules/footer-items-social :: social(${item.options?.items})}" />
+        </th:block>
+
+        <div th:if="${item.value == 'copyright'}">
+          ©
+          <span th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy')}"></span>
+          <a href="/" class="hover:underline" th:text="${site.title}"></a>
+        </div>
+
+        <div th:if="${item.value == 'powered_by'}">
+          <span>Powered by</span>
+          <a
+            href="https://www.halo.run"
+            class="text-primary-600 dark:text-primary-400 font-medium hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Halo</a
+          >
+          <span>&amp;</span>
+          <a
+            href="https://github.com/jin2089/halo_howell"
+            class="text-primary-600 dark:text-primary-400 font-medium hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Howell</a
+          >
+        </div>
+
+        <div th:if="${item.value == 'halo_footer'}">
+          <halo:footer />
+        </div>
+
+        <span
+          th:if="${item.value == 'icp' and not #strings.isEmpty(item.options?.text)}"
+          class="inline-flex items-center justify-center gap-1"
+        >
+          <img th:src="@{/assets/images/icp.webp}" class="size-4" alt="ICP备案" loading="lazy" decoding="async" />
+          <a
+            href="https://beian.miit.gov.cn/"
+            class="inline-flex items-center gap-1 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            th:text="${item.options.text}"
+          ></a>
+        </span>
+
+        <div th:if="${item.value == 'gongan' and not #strings.isEmpty(item.options?.text)}">
+          <p class="flex items-center justify-center gap-1">
+            <img th:src="@{/assets/images/gongan.png}" class="size-4" alt="公安备案" loading="lazy" decoding="async" />
+            <a
+              id="gongan-link-3"
+              href="https://beian.mps.gov.cn/#/query/webSearch"
+              class="hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              th:text="${item.options.text}"
+            ></a>
+          </p>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</footer>
+
 <script>
   // Extract gongan beian number from text and construct MPS query URL
   (function () {

@@ -22,8 +22,9 @@ export default () => ({
   get colorScheme() {
     return this.colorSchemes.find((x) => x.value === this.currentValue);
   },
-  setColorScheme(colorScheme: ColorSchemeType, store: boolean) {
-    setColorScheme(colorScheme, store);
+  setColorScheme(colorScheme: ColorSchemeType, store: boolean, event?: MouseEvent) {
+    const origin = event ? { x: event.clientX, y: event.clientY } : undefined;
+    setColorScheme(colorScheme, store, origin);
     this.currentValue = colorScheme;
   },
 });

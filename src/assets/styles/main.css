@@ -4,6 +4,32 @@
   display: none !important;
 }
 
+:root {
+  --z-view-transition: 2;
+}
+
+/* 配色切换的圆形扩散依赖 View Transition；关闭默认淡入淡出，只保留自定义裁剪动画。 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: var(--z-view-transition);
+}
+
+::view-transition-new(root) {
+  z-index: calc(var(--z-view-transition) + 1);
+}
+
+/* 配色切换期间暂停 Pjax 的 root 淡入淡出，只播放圆形裁剪动画。
+   header 已有 pjax.css 中的 site-header 名称，这里不再重复声明。 */
+html.color-scheme-transitioning::view-transition-old(*),
+html.color-scheme-transitioning::view-transition-new(*) {
+  animation: none;
+}
+
 html {
   scroll-padding-top: 100px;
   scroll-behavior: smooth;

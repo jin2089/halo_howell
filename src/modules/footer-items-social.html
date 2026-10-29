@@ -1,0 +1,27 @@
+<th:block th:fragment="social(items)">
+  <th:block th:with="socialItems = ${items}">
+    <div th:unless="${#lists.isEmpty(socialItems)}" class="flex flex-wrap items-center justify-center gap-5">
+      <th:block th:each="item : ${socialItems}">
+        <a
+          th:if="${item.url_type == 'normal'}"
+          th:href="${item.url}"
+          class="text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-white [&>svg]:size-5"
+          th:title="${item.name}"
+        >
+          <th:block th:if="${item.iconify != null}" th:utext="${item.iconify.value}"></th:block>
+          <div th:if="${item.iconify == null}" th:classappend="${item.icon}" class="size-5"></div>
+        </a>
+        <image-lightbox
+          th:if="${item.url_type == 'image'}"
+          th:attr="src=${item.url},alt=${item.name},data-close-label=#{fragment.lightbox.close}"
+          role="button"
+          tabindex="0"
+          class="cursor-pointer text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-white [&>svg]:size-5"
+        >
+          <th:block th:if="${item.iconify != null}" th:utext="${item.iconify.value}"></th:block>
+          <div th:if="${item.iconify == null}" th:classappend="${item.icon}" class="size-5"></div>
+        </image-lightbox>
+      </th:block>
+    </div>
+  </th:block>
+</th:block>
