@@ -4,8 +4,8 @@
  */
 
 :root {
-  /* header 使用 h-16（4rem），阅读进度条贴着 header 下沿显示 */
-  --header-height: 4rem;
+  /* header 使用 h-[4.5rem]，阅读进度条贴着 header 下沿显示 */
+  --header-height: 4.5rem;
 }
 
 /* 跳过链接：默认移出视口，键盘聚焦时出现 */

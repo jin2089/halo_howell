@@ -1,4 +1,7 @@
-<footer th:if="${theme.config.footer.style == 'style_1'}" class="bg-surface-card mt-10 py-8">
+<footer
+  th:if="${theme.config.footer.style == 'style_1' and not (theme.config.layout.minimal_layout ?: true)}"
+  class="bg-surface-card mt-10 py-8"
+>
   <div class="mx-auto max-w-7xl px-4 sm:flex sm:items-center sm:justify-between lg:px-6">
     <a href="/" class="mb-4 flex items-center justify-center sm:mb-0 sm:justify-start">
       <img
@@ -80,7 +83,10 @@
   </div>
 </footer>
 
-<footer th:if="${theme.config.footer.style == 'style_2'}" class="bg-surface-card mt-10 py-8">
+<footer
+  th:if="${theme.config.footer.style == 'style_2' and not (theme.config.layout.minimal_layout ?: true)}"
+  class="bg-surface-card mt-10 py-8"
+>
   <div class="mx-auto max-w-7xl px-4 md:flex md:justify-between md:gap-10 lg:px-6">
     <div class="mb-6 max-w-full md:mb-0 md:max-w-md">
       <a href="/" class="mb-6 flex items-center">
@@ -178,7 +184,7 @@
 </footer>
 
 <footer
-  th:if="${theme.config.footer.style == 'items' and not #lists.isEmpty(theme.config.footer.footer_items)}"
+  th:if="${(theme.config.footer.style == 'items' or (theme.config.layout.minimal_layout ?: true)) and not #lists.isEmpty(theme.config.footer.footer_items)}"
   class="bg-surface-card mt-10 py-8"
 >
   <div class="mx-auto max-w-7xl px-4 lg:px-6">

@@ -21,15 +21,20 @@ spec:
         - $formkit: select
           name: post_list_layout
           label: 文章列表布局
-          value: grid_3
+          value: single
           options:
-            - label: 网格（一行三列）
-              value: grid_3
-            - label: 网格（一行两列）
-              value: grid_2
             - label: 单条
               value: single
+            - label: 网格（一行两列）
+              value: grid_2
+            - label: 网格（一行三列）
+              value: grid_3
           help: "选择单条时，文章卡片的图片将位于左侧"
+        - $formkit: checkbox
+          name: minimal_layout
+          label: 极简布局
+          value: true
+          help: "默认开启：首页和列表页强制单条，文章页去卡片化，页脚使用自定义内容。关闭后恢复文章列表布局与页脚风格选项。"
         - $formkit: group
           name: post_card_display
           id: post_card_display
@@ -64,56 +69,6 @@ spec:
               name: pin
               label: 置顶图标
               value: true
-        - $formkit: select
-          name: header_widget
-          id: header_widget
-          label: 首页顶部模块
-          value: site_title
-          options:
-            - label: 无
-              value: none
-            - label: 最新一篇文章
-              value: latest_post
-            - label: 文章网格（最新五篇文章）
-              value: latest_post_grid
-            - label: 站点标题
-              value: site_title
-        - $formkit: select
-          if: "$get(header_widget).value !== none"
-          name: header_background_type
-          id: header_background_type
-          key: header_background_type
-          label: 首页顶部背景
-          value: image
-          options:
-            - label: 手动设置
-              value: manual
-            - label: 图片
-              value: image
-        - $formkit: text
-          if: "$get(header_widget).value !== none && $get(header_background_type).value === manual"
-          name: header_background
-          id: header_background
-          key: header_background
-          label: 首页顶部背景
-        - $formkit: attachment
-          if: "$get(header_widget).value !== none && $get(header_background_type).value === image"
-          name: header_background_image
-          id: header_background_image
-          key: header_background_image
-          label: 首页顶部背景图片
-          value: /themes/theme-earth/assets/images/default-background-2023-10-12.jpeg
-        - $formkit: color
-          if: "$get(header_widget).value === site_title"
-          name: title_color
-          id: title_color
-          key: title_color
-          label: 标题文字颜色
-          value: "#ffffff"
-        - $formkit: checkbox
-          name: content_header
-          label: 显示文章页面顶部背景
-          value: true
         - $formkit: checkbox
           name: show_reading_progress
           label: 显示阅读进度条
@@ -582,7 +537,7 @@ spec:
           id: style
           key: style
           label: 页脚风格
-          value: style_1
+          value: items
           options:
             - label: 风格一
               value: style_1
@@ -721,6 +676,7 @@ spec:
           label: 页脚内容
           help: 仅在「自定义内容」风格下生效，可按需增删和排序。
           value:
+            - value: social_media
             - value: copyright
             - value: powered_by
             - value: halo_footer

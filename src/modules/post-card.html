@@ -1,6 +1,6 @@
 <div
   th:fragment="post-card(post,cover,animation,border,direction)"
-  class="group bg-surface-card flex h-full flex-col overflow-hidden rounded-xl shadow-md ring-[3px] ring-black transition-all duration-500 hover:shadow-lg dark:ring-slate-700"
+  class="group bg-surface-card flex h-full flex-col overflow-hidden rounded-xl border border-gray-200/80 shadow-sm transition-all duration-300 hover:shadow-md dark:border-slate-700"
   th:with="postCardDisplay=${theme.config.layout.post_card_display}, showCategories=${postCardDisplay?.categories ?: true}, showTags=${postCardDisplay?.tags ?: true}, showExcerpt=${postCardDisplay?.excerpt ?: true}, showPublishTime=${postCardDisplay?.publish_time ?: true}, showPin=${postCardDisplay?.pin ?: true}"
   th:classappend="${animation  ? 'hover:-translate-y-1' : ''} + ' ' + ${border ? 'hover:ring-2' : ''} + ' ' + ${direction == 'column' ? '!grid grid-cols-1 sm:grid-cols-5' : ''}"
 >
@@ -17,8 +17,7 @@
                     ${thumbnail.gen(post.spec.cover, 'm')} 800w,
                     ${thumbnail.gen(post.spec.cover, 'l')} 1200w|"
         sizes="(max-width: 1200px) 100vw, 1200px"
-        class="size-full object-cover transition-all duration-500"
-        th:classappend="${animation} ? 'group-hover:scale-105'"
+        class="size-full object-cover transition-all duration-300"
       />
     </a>
     <div
@@ -31,7 +30,7 @@
   </div>
   <div
     class="relative col-span-3 grid h-full grid-cols-1 content-between gap-2 p-4"
-    th:with="list_layout=${theme.config.layout.post_list_layout}"
+    th:with="list_layout=${(theme.config.layout.minimal_layout ?: true) ? 'single' : theme.config.layout.post_list_layout}"
     th:classappend="${#strings.isEmpty(post.spec.cover) ? 'col-span-5' : ''}"
   >
     <div class="space-y-2">
@@ -58,12 +57,12 @@
           </a>
         </th:block>
       </div>
-      <h1
-        class="line-clamp-2 cursor-pointer text-2xl font-medium transition-all hover:text-gray-500 hover:underline dark:text-slate-50 dark:hover:text-white"
+      <h2
+        class="line-clamp-2 cursor-pointer text-2xl font-semibold transition-colors hover:text-gray-500 hover:underline dark:text-slate-50 dark:hover:text-white"
         th:classappend="|${direction == 'column' ? 'sm:line-clamp-2' : ''} ${list_layout == 'grid_2' ? 'sm:line-clamp-3' : ''} ${list_layout == 'grid_3' ? 'sm:line-clamp-4' : ''}|"
       >
         <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}" th:title="${post.spec.title}"></a>
-      </h1>
+      </h2>
       <p
         th:if="${showExcerpt}"
         class="font-sm line-clamp-2 font-light dark:text-slate-200"
@@ -71,27 +70,9 @@
         th:classappend="${list_layout == 'grid_3' ? 'sm:line-clamp-3' : ''}"
       ></p>
     </div>
-    <div class="mt-4 flex items-center justify-start gap-2">
-      <a th:href="@{${post.owner.permalink}}" th:title="${post.owner.displayName}">
-        <img
-          th:src="${post.owner.avatar ?: #theme.assets('/images/default-avatar.svg')}"
-          th:title="${post.owner.displayName}"
-          th:alt="${post.owner.displayName}"
-          class="size-8 rounded-full border drop-shadow-sm dark:border-slate-700"
-        />
-      </a>
-      <a
-        th:href="@{${post.owner.permalink}}"
-        th:title="${post.owner.displayName}"
-        class="text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-slate-100 dark:hover:text-slate-200"
-        th:if="${#strings.isEmpty(post.owner.avatar)}"
-        th:text="${post.owner.displayName}"
-      ></a>
-      <span
-        th:if="${showPublishTime}"
-        class="text-sm text-gray-600 tabular-nums dark:text-slate-300"
-        th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"
-      >
+    <div th:if="${showPublishTime}" class="mt-4 flex items-center gap-1.5 text-sm text-gray-500 dark:text-slate-400">
+      <span class="i-tabler-calendar text-sm" aria-hidden="true"></span>
+      <span class="tabular-nums" th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}">
       </span>
     </div>
   </div>

@@ -28,5 +28,7 @@ templates
 dist
 .vitest/
 
+docs/
+
 tmp.md
 nul

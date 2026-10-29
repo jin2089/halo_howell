@@ -1,6 +1,6 @@
 <header
   id="header-menu"
-  class="bg-surface-card sticky top-0 z-10 flex h-16 py-3 shadow-xs transition-all"
+  class="bg-surface-card sticky top-0 z-10 flex h-[4.5rem] py-3 shadow-sm transition-all"
   x-data="{ open : false }"
   th:classappend="${(theme.config.layout.enable_glass_navbar ?: false) ? ' header-menu-glass' : ''}"
   th:style="|--header-glass-opacity: ${theme.config.layout.glass_navbar_opacity ?: '0.82'}; --header-glass-blur-factor: ${theme.config.layout.glass_navbar_blur ?: '0.75'};|"
@@ -19,22 +19,22 @@
           <span
             th:if="${theme.config.global.logo_type == 'text'} or ${#strings.isEmpty(site.logo)}"
             id="site-title"
-            class="font-medium text-gray-900 dark:text-slate-100"
+            class="font-bold tracking-tight text-gray-900 dark:text-slate-100"
             th:classappend="${siteTitleSize == 'large' ? ' text-2xl' : (siteTitleSize == 'medium' ? ' text-xl' : ' text-lg')}"
             th:text="${site.title}"
           ></span>
         </a>
       </div>
-      <ul th:if="${menu != null} and ${not #lists.isEmpty(menu.menuItems)}" class="hidden items-center gap-8 sm:flex">
+      <ul th:if="${menu != null} and ${not #lists.isEmpty(menu.menuItems)}" class="hidden items-center gap-1 md:flex">
         <li
           th:each="menuItem : ${menu.menuItems}"
-          class="relative cursor-pointer text-sm font-medium transition-all"
+          class="relative cursor-pointer text-base font-bold transition-all"
           x-data="dropdown"
           @mouseenter="open()"
           @mouseleave="close()"
         >
           <a
-            class="hover:text-primary-600 text-gray-600 dark:text-slate-50 dark:hover:text-gray-300"
+            class="hover:text-primary-600 inline-flex h-11 items-center rounded-lg px-5 text-gray-600 transition-colors hover:bg-gray-100 dark:text-slate-50 dark:hover:bg-slate-700 dark:hover:text-gray-300"
             th:href="@{${menuItem.status.href}}"
             th:text="${menuItem.status.displayName}"
             th:target="${menuItem.spec.target?.value}"
@@ -70,7 +70,7 @@
     </div>
     <div class="flex items-center">
       <ul x-data="colorSchemeSwitcher" class="flex items-center gap-4">
-        <li class="sm:hidden" x-on:click="open = true">
+        <li class="md:hidden" x-on:click="open = true">
           <div class="i-tabler-menu-2 hover:text-primary-600 text-lg text-gray-600 dark:text-slate-100"></div>
         </li>
         <li
