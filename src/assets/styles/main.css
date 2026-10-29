@@ -22,7 +22,7 @@ html {
 }
 
 .is-active-link {
-  @apply rounded-sm bg-gray-100 dark:bg-slate-600;
+  @apply rounded-sm bg-gray-100 font-medium text-gray-900 dark:bg-slate-600 dark:text-slate-50;
 }
 
 /* 正文排版跟随语义色：typography 插件把变量定义在 .prose 上，

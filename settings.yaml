@@ -239,17 +239,92 @@ spec:
           name: cover_height
           label: 封面图高度
           value: "24rem"
+        - $formkit: select
+          name: toc_mode
+          label: 文章目录显示
+          value: both
+          options:
+            - label: 关闭
+              value: none
+            - label: 左侧粘性目录
+              value: left
+            - label: 文内目录
+              value: inline
+            - label: 左侧 + 移动端文内
+              value: both
+        - $formkit: select
+          name: navigation_scope
+          label: 上一篇/下一篇范围
+          value: all
+          options:
+            - label: 全站文章
+              value: all
+            - label: 同主分类
+              value: category
+          help: 「同主分类」需要 Halo 2.25.0 及以上版本；旧版本会自动退回全站文章。
+        - $formkit: group
+          name: post_display
+          id: post_display
+          label: 文章页显示设置
+          help: 勾选需要在文章页中显示的信息与操作。
+          value:
+            categories: true
+            tags: true
+            visit: true
+            publish_time: true
+            navigation: true
+            upvote: true
+            share: true
+          attrs:
+            style: "display:flex;flex-wrap:wrap;gap:8px 16px;"
+          children:
+            - $formkit: checkbox
+              name: categories
+              label: 分类
+              value: true
+            - $formkit: checkbox
+              name: tags
+              label: 标签
+              value: true
+            - $formkit: checkbox
+              name: visit
+              label: 浏览量
+              value: true
+            - $formkit: checkbox
+              name: publish_time
+              label: 发布时间
+              value: true
+            - $formkit: checkbox
+              name: navigation
+              label: 上一篇/下一篇
+              value: true
+            - $formkit: checkbox
+              name: upvote
+              label: 点赞按钮
+              value: true
+            - $formkit: checkbox
+              name: share
+              label: 分享按钮
+              value: true
         - $formkit: checkbox
+          name: expand_inline_toc
+          label: 展开文内目录
+          value: false
+        - $formkit: checkbox
+          if: "$get(post_display).value == null"
           name: show_upvote_button
-          label: 显示点赞按钮
+          label: 显示点赞按钮（旧配置）
+          help: 已废弃，请使用「文章页显示设置」中的点赞选项。
           value: true
         - $formkit: checkbox
+          if: "$get(post_display).value == null"
           name: show_share_button
           id: show_share_button
-          label: 显示分享按钮
+          label: 显示分享按钮（旧配置）
+          help: 已废弃，请使用「文章页显示设置」中的分享选项。
           value: true
         - $formkit: select
-          if: $get(show_share_button).value
+          if: "$get(post_display).value.share"
           name: share_item_ids
           key: share_item_ids
           id: share_item_ids

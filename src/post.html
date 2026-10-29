@@ -21,9 +21,25 @@
   </template>
   <section
     class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[1fr_18rem] lg:px-6"
-    th:classappend="${theme.config.layout.content_header} and ${not #strings.isEmpty(post.spec.cover)} ? '!-mt-20' : ''"
+    th:with="tocMode = ${theme.config.post.toc_mode ?: 'both'}, postDisplay = ${theme.config.post.post_display}"
+    th:classappend="${
+      (theme.config.layout.content_header and not #strings.isEmpty(post.spec.cover) ? '!-mt-20 ' : '')
+      + ((tocMode == 'left' or tocMode == 'both') ? 'xl:grid-cols-[auto_minmax(0,1fr)_18rem]' : 'xl:grid-cols-[minmax(0,1fr)_18rem]')
+    }"
   >
-    <div class="z-0 min-w-0">
+    <div
+      th:if="${tocMode == 'left' or tocMode == 'both'}"
+      class="toc-container hidden xl:col-start-1 xl:block xl:w-56 xl:shrink-0"
+    >
+      <div class="bg-surface-card sticky top-20 rounded-xl p-3 shadow-sm transition-all duration-300">
+        <h2 class="inline-flex items-center gap-2 text-base text-gray-900 dark:text-slate-50">
+          <span class="i-tabler-list-tree text-primary-500 text-lg"></span>
+          <th:block th:text="#{page.post.toc}"></th:block>
+        </h2>
+        <div class="toc mt-2 max-h-[calc(100vh-8rem)] overflow-auto"></div>
+      </div>
+    </div>
+    <div class="z-0 min-w-0" th:classappend="${(tocMode == 'left' or tocMode == 'both') ? ' xl:col-start-2' : ''}">
       <div x-data="upvote('post','content.halo.run','posts')" class="bg-surface-card rounded-xl p-4">
         <div
           th:attr="x-data=|{name:'${post.metadata.name}'}|"
@@ -45,9 +61,19 @@
                 th:text="${post.owner.displayName}"
               ></a>
               <div class="flex items-center gap-2 text-xs font-light text-gray-600 dark:text-slate-100">
-                <span th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"></span>
-                <span class="text-gray-300 dark:text-slate-200">/</span>
-                <span th:text="#{common.visitCount(${post.stats?.visit ?:0})}"></span>
+                <span
+                  th:if="${postDisplay?.publish_time ?: true}"
+                  th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"
+                ></span>
+                <span
+                  th:if="${(postDisplay?.publish_time ?: true) and (postDisplay?.visit ?: true)}"
+                  class="text-gray-300 dark:text-slate-200"
+                  >/</span
+                >
+                <span
+                  th:if="${postDisplay?.visit ?: true}"
+                  th:text="#{common.visitCount(${post.stats?.visit ?:0})}"
+                ></span>
               </div>
             </div>
           </div>
@@ -69,7 +95,7 @@
               </template>
             </div>
             <div
-              th:if="${theme.config.post.show_upvote_button}"
+              th:if="${postDisplay?.upvote ?: (theme.config.post.show_upvote_button ?: true)}"
               @click="handleUpvote(name)"
               class="group inline-flex cursor-pointer items-center rounded-lg"
             >
@@ -108,7 +134,7 @@
             </a>
 
             <div
-              th:if="${theme.config.post.show_share_button}"
+              th:if="${postDisplay?.share ?: (theme.config.post.show_share_button ?: true)}"
               th:attr="x-data=|share(${theme.config.post.share_item_ids})|"
               class="group inline-flex cursor-pointer items-center gap-0.5 rounded-lg"
               @click="shareModal = true"
@@ -129,7 +155,20 @@
           class="vt-post-title mt-3 text-3xl font-medium dark:text-slate-50"
           th:text="${post.spec.title}"
         ></h1>
-        <div class="my-3 flex flex-wrap gap-2">
+        <div
+          th:if="${(postDisplay?.categories ?: true) and not #lists.isEmpty(post.categories)}"
+          class="my-3 flex flex-wrap items-center gap-2"
+        >
+          <span class="i-tabler-folder text-base text-gray-500 dark:text-slate-400"></span>
+          <a
+            th:each="category : ${post.categories}"
+            th:href="@{${category.status.permalink}}"
+            th:title="${category.spec.displayName}"
+            th:text="${category.spec.displayName}"
+            class="cursor-pointer text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-50"
+          ></a>
+        </div>
+        <div th:if="${(postDisplay?.tags ?: true) and not #lists.isEmpty(post.tags)}" class="my-3 flex flex-wrap gap-2">
           <a
             th:each="tag : ${post.tags}"
             th:href="@{${tag.status.permalink}}"
@@ -139,6 +178,29 @@
           >
           </a>
         </div>
+        <div
+          th:if="${tocMode == 'inline' or tocMode == 'both'}"
+          class="toc-container bg-surface-card my-5 rounded-xl p-4 shadow-sm"
+          th:classappend="${tocMode == 'both' ? ' xl:hidden' : ''}"
+          th:attr="x-data=|{ tocOpen: ${theme.config.post.expand_inline_toc ?: false} }|"
+        >
+          <button
+            type="button"
+            class="flex w-full items-center justify-between gap-3 text-left"
+            @click="tocOpen = !tocOpen"
+            :aria-expanded="tocOpen.toString()"
+          >
+            <span class="inline-flex items-center gap-2 text-base font-medium text-gray-900 dark:text-slate-50">
+              <span class="i-tabler-list-tree text-primary-500 text-lg"></span>
+              <span th:text="#{page.post.toc}"></span>
+            </span>
+            <span
+              class="i-tabler-chevron-down text-lg text-gray-400 transition-transform dark:text-slate-500"
+              :class="tocOpen ? 'rotate-180' : ''"
+            ></span>
+          </button>
+          <div class="toc mt-3 max-h-64 overflow-auto" x-show="tocOpen" x-cloak></div>
+        </div>
         <article
           id="content"
           class="!max-w-none break-words"
@@ -147,7 +209,8 @@
         ></article>
         <div
           class="mt-10 flex flex-col sm:flex-row sm:justify-between"
-          th:with="postCursor = ${postFinder.cursor(post.metadata.name)}"
+          th:if="${postDisplay?.navigation ?: true}"
+          th:with="postCursor = ${(theme.config.post.navigation_scope == 'category' and #halo.matchVersion('>=2.25.0')) ? postFinder.cursorByCategory(post.metadata.name) : postFinder.cursor(post.metadata.name)}"
         >
           <div class="flex justify-start">
             <a
@@ -185,18 +248,8 @@
         </div>
       </div>
     </div>
-    <th:block th:replace="~{modules/sidebar :: sidebar(prepend = ~{::sidebar_prepend})}">
-      <th:block th:fragment="sidebar_prepend">
-        <div
-          class="toc-container bg-surface-card sticky top-20 z-[5] w-full cursor-pointer rounded-xl p-3 shadow-sm transition-all duration-500 hover:shadow-md"
-        >
-          <h2 class="inline-flex items-center gap-2 text-base dark:text-slate-50">
-            <span class="i-tabler-list text-lg"></span>
-            <th:block th:text="#{page.post.toc}"></th:block>
-          </h2>
-          <div class="toc mt-2 max-h-64 overflow-auto"></div>
-        </div>
-      </th:block>
-    </th:block>
+    <div th:classappend="${(tocMode == 'left' or tocMode == 'both') ? ' xl:col-start-3' : ''}">
+      <th:block th:replace="~{modules/sidebar :: sidebar(prepend = null)}" />
+    </div>
   </section>
 </include>

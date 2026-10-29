@@ -53,6 +53,22 @@
 
 .markdown-body pre code {
   border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background-color: var(--bg-muted);
+  padding: 1rem;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  border-color: var(--border-base);
+}
+
+.markdown-body table th {
+  background-color: var(--bg-muted);
 }
 
 .markdown-body p > img,
