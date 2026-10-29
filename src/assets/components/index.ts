@@ -8,4 +8,5 @@
 import "./back-to-top";
 import "./image-lightbox";
 import "./number-formatter";
+import "./reading-progress";
 import "./video-lightbox";

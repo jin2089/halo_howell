@@ -1,5 +1,6 @@
 import "./styles/tailwind.css";
 import "./styles/tokens.css";
+import "./styles/shell.css";
 import "./styles/main.css";
 import "./styles/pjax.css";
 import "./styles/components.css";

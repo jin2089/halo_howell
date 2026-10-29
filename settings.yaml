@@ -8,6 +8,17 @@ spec:
       label: 布局
       formSchema:
         - $formkit: select
+          name: site_title_size
+          label: 站点标题字号
+          value: small
+          options:
+            - label: 小
+              value: small
+            - label: 中
+              value: medium
+            - label: 大
+              value: large
+        - $formkit: select
           name: post_list_layout
           label: 文章列表布局
           value: grid_3
@@ -69,6 +80,34 @@ spec:
           name: content_header
           label: 显示文章页面顶部背景
           value: true
+        - $formkit: checkbox
+          name: show_reading_progress
+          label: 显示阅读进度条
+          value: true
+          help: 在导航栏下方显示当前页面的阅读进度。
+        - $formkit: checkbox
+          name: enable_glass_navbar
+          id: enable_glass_navbar
+          label: 毛玻璃导航栏
+          value: false
+        - $formkit: number
+          if: "$get(enable_glass_navbar).value"
+          name: glass_navbar_opacity
+          label: 毛玻璃不透明度
+          value: "0.82"
+          min: "0.82"
+          max: "1"
+          step: "0.01"
+          help: 数值越低越透明；为保障导航文字对比度，最低为 0.82。
+        - $formkit: number
+          if: "$get(enable_glass_navbar).value"
+          name: glass_navbar_blur
+          label: 毛玻璃模糊强度
+          value: "0.75"
+          min: "0"
+          max: "1"
+          step: "0.01"
+          help: 0 到 1，数值越大背景越模糊。
 
     - group: global
       label: 全局
@@ -129,6 +168,51 @@ spec:
           name: enable_change_hue
           label: 允许访客切换主题色相
           value: true
+
+        - $formkit: select
+          name: font_family
+          label: 字体
+          value: system
+          options:
+            - label: 系统默认
+              value: system
+            - label: Noto Sans SC 思源黑体简体
+              value: noto_sans_sc
+            - label: Noto Serif SC 思源宋体
+              value: noto_serif_sc
+            - label: 落霞孤鹜文楷
+              value: lxgw_wenkai
+
+        - $formkit: select
+          name: style_preset
+          label: 主题样式预设
+          value: plain
+          help: 预设只调整中性色相，品牌色仍由「主题色相」控制。
+          options:
+            - label: 素笺（默认）
+              value: plain
+            - label: 晴空
+              value: azure
+            - label: 青墨
+              value: indigo
+            - label: 竹青
+              value: bamboo
+            - label: 翠微
+              value: jade
+            - label: 松烟
+              value: pine
+            - label: 鹅黄
+              value: gosling
+            - label: 橘颂
+              value: tangerine
+            - label: 旧笺
+              value: vintage
+            - label: 桃夭
+              value: peach
+            - label: 胭脂
+              value: rouge
+            - label: 紫烟
+              value: violet
 
     - group: post
       label: 文章

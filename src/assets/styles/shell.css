@@ -1,0 +1,168 @@
+/*
+ * 外壳层：跳过链接、阅读进度、毛玻璃导航、字体与主题预设。
+ * 这里只用纯 CSS，不依赖 Tailwind 的 @apply / 层级顺序。
+ */
+
+:root {
+  /* header 使用 h-16（4rem），阅读进度条贴着 header 下沿显示 */
+  --header-height: 4rem;
+}
+
+/* 跳过链接：默认移出视口，键盘聚焦时出现 */
+.skip-to-content {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--primary);
+  color: var(--bg-card);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus-visible {
+  top: 0.75rem;
+  outline: 2px solid var(--bg-card);
+  outline-offset: 2px;
+}
+
+/* 阅读进度：挂在 header 下沿，避免和 Pjax 顶部加载条叠加 */
+.reading-progress-bar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  z-index: 40;
+  display: block;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background: transparent;
+}
+
+.reading-progress-fill {
+  width: var(--reading-progress, 0%);
+  height: 100%;
+  background: var(--primary);
+  transition: width 100ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-to-content {
+    transition: none;
+  }
+
+  .reading-progress-fill {
+    transition: none;
+  }
+}
+
+/*
+ * 毛玻璃导航：opacity 最低限制在 0.82，避免导航文字与背景内容对比度不足。
+ * 背景使用语义 token，因此亮/暗模式自动跟随，不需要再做一套硬编码深色值。
+ */
+#header-menu.header-menu-glass {
+  --glass-opacity: max(var(--header-glass-opacity, 0.82), 0.82);
+  border-bottom: 1px solid color-mix(in srgb, var(--border-base) 60%, transparent);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg-card) calc(var(--glass-opacity) * 100%), transparent) 0%,
+    color-mix(in srgb, var(--bg-base) calc(var(--glass-opacity) * 100%), transparent) 100%
+  );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--border-base) 50%, transparent),
+    0 8px 24px rgb(0 0 0 / 10%);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  #header-menu.header-menu-glass,
+  #header-menu.header-menu-glass.menu-sticky {
+    -webkit-backdrop-filter: saturate(180%) blur(calc(24px * var(--header-glass-blur-factor, 0.75)));
+    backdrop-filter: saturate(180%) blur(calc(24px * var(--header-glass-blur-factor, 0.75)));
+  }
+}
+
+.dark #header-menu.header-menu-glass {
+  border-bottom-color: color-mix(in srgb, var(--border-base) 45%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--border-base) 40%, transparent),
+    0 8px 24px rgb(0 0 0 / 32%);
+}
+
+/* 字体：只替换正文与表单控件，代码块继续使用等宽字体 */
+body.font-noto-sans-sc {
+  --body-font:
+    "Noto Sans SC", "Microsoft YaHei", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body.font-noto-serif-sc {
+  --body-font: "Noto Serif SC", "Songti SC", "STSong", "SimSun", ui-serif, serif;
+}
+
+body.font-lxgw-wenkai {
+  --body-font: "LXGW WenKai", "Noto Serif SC", "STKaiti", "KaiTi", "Microsoft YaHei", ui-serif, serif;
+}
+
+body:is(.font-noto-sans-sc, .font-noto-serif-sc, .font-lxgw-wenkai) {
+  font-family: var(--body-font);
+}
+
+body:is(.font-noto-sans-sc, .font-noto-serif-sc, .font-lxgw-wenkai) :where(button, input, select, textarea) {
+  font-family: var(--body-font);
+}
+
+/*
+ * 12 套主题预设：只调整中性色相，品牌色仍由 --hue / --accent-hue 控制。
+ * 因此访客切换主题色时，品牌色会变化，中性色保持预设的冷暖倾向。
+ */
+html.theme-preset-plain {
+  --neutral-hue: var(--hue);
+}
+
+html.theme-preset-azure {
+  --neutral-hue: 195;
+}
+
+html.theme-preset-indigo {
+  --neutral-hue: 240;
+}
+
+html.theme-preset-bamboo {
+  --neutral-hue: 160;
+}
+
+html.theme-preset-jade {
+  --neutral-hue: 145;
+}
+
+html.theme-preset-pine {
+  --neutral-hue: 140;
+}
+
+html.theme-preset-gosling {
+  --neutral-hue: 80;
+}
+
+html.theme-preset-tangerine {
+  --neutral-hue: 45;
+}
+
+html.theme-preset-vintage {
+  --neutral-hue: 30;
+}
+
+html.theme-preset-peach {
+  --neutral-hue: 325;
+}
+
+html.theme-preset-rouge {
+  --neutral-hue: 340;
+}
+
+html.theme-preset-violet {
+  --neutral-hue: 275;
+}

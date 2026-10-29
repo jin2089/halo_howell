@@ -1,11 +1,29 @@
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}">
+<html
+  th:lang="${#locale.toLanguageTag}"
+  th:with="stylePreset = ${'theme-preset-' + (theme.config.style.style_preset ?: 'plain')}"
+  th:classappend="${stylePreset}"
+>
   <head>
     <include src="base-head.html" />
 
     <slot name="head" />
   </head>
-  <body class="hidden bg-slate-50 dark:bg-slate-900">
+  <body
+    class="hidden bg-slate-50 dark:bg-slate-900"
+    th:with="fontClass = ${theme.config.style.font_family == 'noto_sans_sc' ? 'font-noto-sans-sc' : (theme.config.style.font_family == 'noto_serif_sc' ? 'font-noto-serif-sc' : (theme.config.style.font_family == 'lxgw_wenkai' ? 'font-lxgw-wenkai' : ''))}"
+    th:classappend="${fontClass}"
+  >
+    <a href="#pjax-container" class="skip-to-content" th:text="#{fragment.layout.skipToContent}">跳到正文</a>
+
+    <reading-progress
+      th:if="${theme.config.layout.show_reading_progress != false}"
+      class="reading-progress-bar"
+      aria-hidden="true"
+    >
+      <div class="reading-progress-fill"></div>
+    </reading-progress>
+
     <include src="header.html" />
 
     <main id="pjax-container" tabindex="-1" class="outline-hidden">

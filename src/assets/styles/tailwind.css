@@ -15,30 +15,30 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* 中性色阶：L/C 取自 Tailwind slate 的 OKLCH 换算值，色相跟随 --hue */
-  --color-gray-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
-  --color-gray-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--hue));
+  /* 中性色阶：L/C 取自 Tailwind slate 的 OKLCH 换算值，色相跟随 --neutral-hue */
+  --color-gray-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-gray-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--neutral-hue));
 
-  --color-slate-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--hue));
-  --color-slate-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--hue));
+  --color-slate-50: oklch(98.4% calc(0.0034 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-100: oklch(96.8% calc(0.0069 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-200: oklch(92.9% calc(0.0126 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-300: oklch(86.9% calc(0.0198 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-400: oklch(71.1% calc(0.0351 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-500: oklch(55.4% calc(0.0407 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-600: oklch(44.6% calc(0.0374 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-700: oklch(37.2% calc(0.0392 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-800: oklch(27.9% calc(0.0368 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-900: oklch(20.8% calc(0.0398 * var(--neutral-chroma, 1)) var(--neutral-hue));
+  --color-slate-950: oklch(12.9% calc(0.0406 * var(--neutral-chroma, 1)) var(--neutral-hue));
 
   /* 品牌色阶：色相由 --accent-hue 驱动，可与中性色错开 */
   --color-primary-50: oklch(97% 0.0142 var(--accent-hue));
@@ -65,8 +65,15 @@
   /* 语义别名：DEFAULT 指向 tokens.css 的语义变量，支持透明度修饰符 */
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-like: var(--like);
+  --color-like-hover: var(--like-hover);
+  --color-comment: var(--comment);
+  --color-comment-hover: var(--comment-hover);
+  --color-share: var(--share);
+  --color-share-hover: var(--share-hover);
 
   --color-surface-base: var(--bg-base);
   --color-surface-card: var(--bg-card);

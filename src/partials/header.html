@@ -2,7 +2,9 @@
   id="header-menu"
   class="bg-surface-card sticky top-0 z-10 flex h-16 py-3 shadow-xs transition-all"
   x-data="{ open : false }"
-  th:with="menu = ${menuFinder.getPrimary()}"
+  th:classappend="${(theme.config.layout.enable_glass_navbar ?: false) ? ' header-menu-glass' : ''}"
+  th:style="|--header-glass-opacity: ${theme.config.layout.glass_navbar_opacity ?: '0.82'}; --header-glass-blur-factor: ${theme.config.layout.glass_navbar_blur ?: '0.75'};|"
+  th:with="menu = ${menuFinder.getPrimary()}, siteTitleSize = ${theme.config.layout.site_title_size ?: 'small'}"
 >
   <div class="mx-auto flex h-full w-full max-w-7xl justify-between px-4 lg:px-6">
     <div class="flex h-full items-center gap-6">
@@ -17,7 +19,8 @@
           <span
             th:if="${theme.config.global.logo_type == 'text'} or ${#strings.isEmpty(site.logo)}"
             id="site-title"
-            class="text-lg font-medium text-gray-900 dark:text-slate-100"
+            class="font-medium text-gray-900 dark:text-slate-100"
+            th:classappend="${siteTitleSize == 'large' ? ' text-2xl' : (siteTitleSize == 'medium' ? ' text-xl' : ' text-lg')}"
             th:text="${site.title}"
           ></span>
         </a>
