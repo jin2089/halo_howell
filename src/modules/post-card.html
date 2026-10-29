@@ -1,11 +1,12 @@
 <div
   th:fragment="post-card(post,cover,animation,border,direction)"
-  class="group bg-surface-card flex flex-col overflow-hidden rounded-xl shadow-md ring-[3px] ring-black transition-all duration-500 hover:shadow-lg dark:ring-slate-700"
+  class="group bg-surface-card flex h-full flex-col overflow-hidden rounded-xl shadow-md ring-[3px] ring-black transition-all duration-500 hover:shadow-lg dark:ring-slate-700"
+  th:with="postCardDisplay=${theme.config.layout.post_card_display}, showCategories=${postCardDisplay?.categories ?: true}, showTags=${postCardDisplay?.tags ?: true}, showExcerpt=${postCardDisplay?.excerpt ?: true}, showPublishTime=${postCardDisplay?.publish_time ?: true}, showPin=${postCardDisplay?.pin ?: true}"
   th:classappend="${animation  ? 'hover:-translate-y-1' : ''} + ' ' + ${border ? 'hover:ring-2' : ''} + ' ' + ${direction == 'column' ? '!grid grid-cols-1 sm:grid-cols-5' : ''}"
 >
   <div
     th:if="${cover} and ${not #strings.isEmpty(post.spec.cover)}"
-    class="aspect-video"
+    class="relative aspect-video"
     th:classappend="${direction == 'column' ? 'col-span-2' : ''}"
   >
     <a th:href="@{${post.status.permalink}}" th:title="${post.spec.title}">
@@ -20,7 +21,11 @@
         th:classappend="${animation} ? 'group-hover:scale-105'"
       />
     </a>
-    <div th:if="${post.spec.pinned}" class="absolute !top-1.5 !left-2" th:title="#{fragment.postCard.pinned}">
+    <div
+      th:if="${showPin and post.spec.pinned}"
+      class="absolute !top-1.5 !left-2"
+      th:title="#{fragment.postCard.pinned}"
+    >
       <div class="i-bx-arrow-to-top text-primary-600 !size-5"></div>
     </div>
   </div>
@@ -31,25 +36,27 @@
   >
     <div class="space-y-2">
       <div
-        th:if="${not #lists.isEmpty(post.categories)} or ${not #lists.isEmpty(post.tags)}"
+        th:if="${(showCategories and not #lists.isEmpty(post.categories)) or (showTags and not #lists.isEmpty(post.tags))}"
         class="flex flex-wrap items-center gap-2"
       >
         <a
-          th:if="${#lists.size(post.categories)} gt 0"
+          th:if="${showCategories and not #lists.isEmpty(post.categories)}"
           th:href="@{${post.categories[0].status.permalink}}"
           th:title="${post.categories[0].spec.displayName}"
           th:text="${post.categories[0].spec.displayName}"
           class="mr-1 text-sm font-medium text-gray-800 hover:text-gray-900 dark:text-slate-500 dark:hover:text-slate-600"
         >
         </a>
-        <a
-          th:each="tag : ${post.tags}"
-          th:href="@{${tag.status.permalink}}"
-          th:title="${tag.spec.displayName}"
-          th:text="|#${tag.spec.displayName}|"
-          class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
-        >
-        </a>
+        <th:block th:each="tag : ${post.tags}">
+          <a
+            th:if="${showTags}"
+            th:href="@{${tag.status.permalink}}"
+            th:title="${tag.spec.displayName}"
+            th:text="|#${tag.spec.displayName}|"
+            class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
+          >
+          </a>
+        </th:block>
       </div>
       <h1
         class="line-clamp-2 cursor-pointer text-2xl font-medium transition-all hover:text-gray-500 hover:underline dark:text-slate-50 dark:hover:text-white"
@@ -58,6 +65,7 @@
         <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}" th:title="${post.spec.title}"></a>
       </h1>
       <p
+        th:if="${showExcerpt}"
         class="font-sm line-clamp-2 font-light dark:text-slate-200"
         th:text="${post.status.excerpt}"
         th:classappend="${list_layout == 'grid_3' ? 'sm:line-clamp-3' : ''}"
@@ -80,6 +88,7 @@
         th:text="${post.owner.displayName}"
       ></a>
       <span
+        th:if="${showPublishTime}"
         class="text-sm text-gray-600 tabular-nums dark:text-slate-300"
         th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"
       >

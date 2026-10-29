@@ -1,0 +1,71 @@
+<th:block th:fragment="item(photo, detailUrl)">
+  <article class="animated fadeIn group relative h-auto max-w-full break-inside-avoid">
+    <button
+      type="button"
+      data-gallery-item
+      th:attr="data-gallery-src=${photo.spec.url},data-gallery-title=${not #strings.isEmpty(photo.spec.displayName) ? photo.spec.displayName : photo.metadata.name},data-gallery-description=${photo.spec.description},data-gallery-detail=${detailUrl}"
+      th:aria-label="${not #strings.isEmpty(photo.spec.displayName) ? photo.spec.displayName : photo.metadata.name}"
+      class="relative block w-full cursor-zoom-in overflow-hidden rounded-lg border-0 bg-transparent p-0 text-left"
+    >
+      <img
+        class="transform-gpu rounded-lg transition-all group-hover:scale-105"
+        th:src="${photo.spec.url}"
+        th:srcset="|${thumbnail.gen(photo.spec.url, 's')} 400w,
+                    ${thumbnail.gen(photo.spec.url, 'm')} 800w,
+                    ${thumbnail.gen(photo.spec.url, 'l')} 1200w|"
+        sizes="(max-width: 1200px) 100vw, 1200px"
+        th:alt="${photo.spec.displayName}"
+        loading="lazy"
+        decoding="async"
+      />
+      <th:block th:replace="~{modules/gallery-meta :: meta(${photo})}" />
+      <div
+        class="absolute inset-x-0 bottom-0 rounded-b-lg bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      >
+        <p
+          class="truncate text-sm font-medium text-white"
+          th:if="${not #strings.isEmpty(photo.spec.displayName)}"
+          th:text="${photo.spec.displayName}"
+        ></p>
+        <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-white/90">
+          <span
+            th:if="${photo.exif != null and not #strings.isEmpty(photo.exif.model)}"
+            class="inline-flex items-center gap-1"
+          >
+            <span class="i-tabler-camera text-[10px]"></span>
+            <span th:text="${photo.exif.model}"></span>
+          </span>
+          <span th:if="${photo.exif != null and photo.exif.fNumber != null}" class="inline-flex items-center gap-1">
+            <span class="i-tabler-aperture text-[10px]"></span>
+            <span th:text="|f/${photo.exif.fNumber}|"></span>
+          </span>
+          <span
+            th:if="${photo.exif != null and not #strings.isEmpty(photo.exif.exposureTime)}"
+            class="inline-flex items-center gap-1"
+          >
+            <span class="i-tabler-clock text-[10px]"></span>
+            <span th:text="${photo.exif.exposureTime}"></span>
+          </span>
+          <span th:if="${photo.exif != null and photo.exif.iso != null}" class="inline-flex items-center gap-1">
+            <span class="i-tabler-sun-electricity text-[10px]"></span>
+            <span th:text="${photo.exif.iso}"></span>
+          </span>
+          <span th:if="${photo.exif != null and photo.exif.focalLength != null}" class="inline-flex items-center gap-1">
+            <span class="i-tabler-telescope text-[10px]"></span>
+            <span th:text="|${photo.exif.focalLength}mm|"></span>
+          </span>
+        </div>
+      </div>
+    </button>
+
+    <a
+      th:if="${not #strings.isEmpty(detailUrl)}"
+      th:href="@{${detailUrl}}"
+      th:title="${photo.spec.displayName}"
+      th:aria-label="${photo.spec.displayName}"
+      class="bg-surface-card absolute top-3 right-3 z-10 inline-flex size-9 items-center justify-center rounded-lg text-gray-700 opacity-0 shadow-sm backdrop-blur transition group-hover:opacity-100 hover:bg-gray-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-slate-100 dark:hover:bg-slate-700"
+    >
+      <span class="i-tabler-info-circle text-lg"></span>
+    </a>
+  </article>
+</th:block>

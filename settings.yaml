@@ -30,6 +30,40 @@ spec:
             - label: 单条
               value: single
           help: "选择单条时，文章卡片的图片将位于左侧"
+        - $formkit: group
+          name: post_card_display
+          id: post_card_display
+          label: 文章卡片显示设置
+          help: 勾选需要在首页、分类、标签和作者页文章卡片中显示的信息。
+          value:
+            categories: true
+            tags: true
+            excerpt: true
+            publish_time: true
+            pin: true
+          attrs:
+            style: "display:flex;flex-wrap:wrap;gap:8px 16px;"
+          children:
+            - $formkit: checkbox
+              name: categories
+              label: 分类
+              value: true
+            - $formkit: checkbox
+              name: tags
+              label: 标签
+              value: true
+            - $formkit: checkbox
+              name: excerpt
+              label: 摘要
+              value: true
+            - $formkit: checkbox
+              name: publish_time
+              label: 发布时间
+              value: true
+            - $formkit: checkbox
+              name: pin
+              label: 置顶图标
+              value: true
         - $formkit: select
           name: header_widget
           id: header_widget
@@ -363,6 +397,11 @@ spec:
     - group: sidebar
       label: 侧边栏
       formSchema:
+        - $formkit: checkbox
+          name: show_on_page
+          label: 页面显示侧边栏
+          value: false
+          help: 开启后，独立页面会显示侧边栏；关闭时正文居中显示。
         - $formkit: array
           name: widgets
           label: 小部件
@@ -432,6 +471,19 @@ spec:
                           value: normal
                         - label: 图片
                           value: image
+
+            - $formkit: group
+              if: "$value.value === 'tags'"
+              name: options
+              key: tags-options
+              id: tags-options
+              label: 标签选项
+              children:
+                - $formkit: checkbox
+                  name: show_unused_tags
+                  label: 显示零使用的标签
+                  value: false
+                  help: 关闭后，未被使用过的标签不会出现在侧边栏标签小部件中。
 
         - $formkit: group
           name: profile

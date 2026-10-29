@@ -6,6 +6,7 @@
  * 做幂等守卫，防止重复 import 或重复构建块导致的二次注册。
  */
 import "./back-to-top";
+import "./image-gallery";
 import "./image-lightbox";
 import "./number-formatter";
 import "./reading-progress";

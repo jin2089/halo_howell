@@ -11,9 +11,9 @@
 
       <th:block th:with="categories = ${categoryFinder.listAsTree()}">
         <th:block th:if="${#lists.isEmpty(categories)}">
-          <div class="mt-6 flex items-center justify-center">
-            <span class="text-sm font-light text-gray-600" th:text="#{page.categories.empty}"></span>
-          </div>
+          <th:block
+            th:replace="~{modules/empty-state :: empty(message=#{page.categories.empty}, icon='i-tabler-folder-off')}"
+          />
         </th:block>
 
         <th:block th:unless="${#lists.isEmpty(categories)}" th:with="category = ${categories[0]}">
@@ -26,16 +26,23 @@
               class="mt-6 grid grid-cols-1 gap-6"
               th:classappend="|${list_layout == 'grid_3' ? 'md:grid-cols-2 xl:grid-cols-3' : ''} ${list_layout == 'grid_2' ? 'md:grid-cols-2' : ''}|"
             >
-              <th:block th:each="post : ${posts.items}">
-                <th:block
-                  th:replace="~{modules/post-card :: post-card(${post},true,true,true,${list_layout == 'single' ? 'column' : 'row'})}"
-                />
+              <th:block th:each="post, postStat : ${posts.items}">
+                <div
+                  class="animated fadeIn"
+                  th:style="|animation-delay:${postStat.index lt 12 ? postStat.index * 0.06 : 0}s|"
+                >
+                  <th:block
+                    th:replace="~{modules/post-card :: post-card(${post},true,true,true,${list_layout == 'single' ? 'column' : 'row'})}"
+                  />
+                </div>
               </th:block>
             </div>
 
-            <div th:if="${posts.total == 0}" class="mt-6 flex items-center justify-center">
-              <span class="text-sm font-light text-gray-600" th:text="#{common.noPosts}"></span>
-            </div>
+            <th:block th:if="${posts.total == 0}">
+              <th:block
+                th:replace="~{modules/empty-state :: empty(message=#{common.noPosts}, icon='i-tabler-file-search')}"
+              />
+            </th:block>
             <div th:if="${posts.total gt 10}" class="mt-10 flex justify-end">
               <a
                 class="group inline-flex items-center gap-2 truncate text-sm text-gray-600 hover:text-gray-900 dark:text-slate-100 dark:hover:text-slate-200"

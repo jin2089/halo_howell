@@ -1,8 +1,9 @@
 <div
   th:fragment="featured-post-card(post)"
   class="group bg-surface-card grid cursor-pointer grid-cols-1 overflow-hidden rounded-xl shadow-md transition-all duration-500 hover:shadow-lg sm:grid-cols-5"
+  th:with="postCardDisplay=${theme.config.layout.post_card_display}, showCategories=${postCardDisplay?.categories ?: true}, showTags=${postCardDisplay?.tags ?: true}, showExcerpt=${postCardDisplay?.excerpt ?: true}, showPublishTime=${postCardDisplay?.publish_time ?: true}, showPin=${postCardDisplay?.pin ?: true}"
 >
-  <div th:if="${not #strings.isEmpty(post.spec.cover)}" class="col-span-3 aspect-video">
+  <div th:if="${not #strings.isEmpty(post.spec.cover)}" class="relative col-span-3 aspect-video">
     <a th:href="@{${post.status.permalink}}" th:title="${post.spec.title}">
       <img
         th:src="${post.spec.cover}"
@@ -15,36 +16,49 @@
         class="size-full object-cover transition-all duration-500"
       />
     </a>
+    <div
+      th:if="${showPin and post.spec.pinned}"
+      class="absolute !top-1.5 !left-2"
+      th:title="#{fragment.postCard.pinned}"
+    >
+      <div class="i-bx-arrow-to-top text-primary-600 !size-5"></div>
+    </div>
   </div>
   <div class="relative col-span-2 grid h-full grid-cols-1 content-between gap-2 p-4">
     <div class="space-y-2">
       <div
-        th:if="${not #lists.isEmpty(post.categories)} or ${not #lists.isEmpty(post.tags)}"
+        th:if="${(showCategories and not #lists.isEmpty(post.categories)) or (showTags and not #lists.isEmpty(post.tags))}"
         class="flex flex-wrap items-center gap-2"
       >
         <a
-          th:if="${#lists.size(post.categories)} gt 0"
+          th:if="${showCategories and not #lists.isEmpty(post.categories)}"
           th:href="@{${post.categories[0].status.permalink}}"
           th:title="${post.categories[0].spec.displayName}"
           th:text="${post.categories[0].spec.displayName}"
           class="mr-1 text-sm font-medium text-gray-800 hover:text-gray-900 dark:text-slate-500 dark:hover:text-slate-600"
         >
         </a>
-        <a
-          th:each="tag : ${post.tags}"
-          th:href="@{${tag.status.permalink}}"
-          th:title="${tag.spec.displayName}"
-          th:text="|#${tag.spec.displayName}|"
-          class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
-        >
-        </a>
+        <th:block th:each="tag : ${post.tags}">
+          <a
+            th:if="${showTags}"
+            th:href="@{${tag.status.permalink}}"
+            th:title="${tag.spec.displayName}"
+            th:text="|#${tag.spec.displayName}|"
+            class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
+          >
+          </a>
+        </th:block>
       </div>
       <h1
         class="line-clamp-2 cursor-pointer text-2xl font-medium transition-all hover:text-gray-500 hover:underline dark:text-slate-50 dark:hover:text-white"
       >
         <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}"></a>
       </h1>
-      <p class="font-sm line-clamp-6 font-light dark:text-slate-200" th:text="${post.status.excerpt}"></p>
+      <p
+        th:if="${showExcerpt}"
+        class="font-sm line-clamp-6 font-light dark:text-slate-200"
+        th:text="${post.status.excerpt}"
+      ></p>
     </div>
     <div class="mt-4 flex items-center justify-start gap-2">
       <a th:href="@{${post.owner.permalink}}" th:title="${post.owner.displayName}">
@@ -63,6 +77,7 @@
         th:text="${post.owner.displayName}"
       ></a>
       <span
+        th:if="${showPublishTime}"
         class="text-sm text-gray-600 tabular-nums dark:text-slate-300"
         th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"
       >

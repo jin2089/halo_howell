@@ -65,6 +65,217 @@
   height: 1.25rem;
 }
 
+/* 图片画廊：沿用 lightbox-dialog 的原生 dialog 基座，只补面板、导航与 EXIF 信息。 */
+image-gallery {
+  display: block;
+}
+
+/* 正文里的画廊容器只用于承接关闭后的焦点，不参与键盘 Tab 顺序，因此隐藏程序化焦点框。 */
+image-gallery[data-gallery-content]:focus {
+  outline: none;
+}
+
+.gallery-dialog .gallery-panel {
+  position: relative;
+  display: flex;
+  width: min(92vw, 68rem);
+  max-height: 88vh;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--bg-card);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 40%);
+}
+
+.gallery-panel [hidden] {
+  display: none !important;
+}
+
+.gallery-stage {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg-muted);
+}
+
+.gallery-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg-muted);
+  color: var(--danger);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.gallery-media {
+  display: block;
+  max-width: 100%;
+  max-height: 62vh;
+  border-radius: 0.5rem;
+  object-fit: contain;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
+}
+
+.gallery-info {
+  max-height: 28vh;
+  flex: 0 1 auto;
+  overflow: auto;
+  padding: 0.9rem 4.5rem 0.9rem 1rem;
+  border-top: 1px solid var(--border-subtle);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.gallery-title {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.gallery-description {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.gallery-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.gallery-meta-item {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  overflow: hidden;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.375rem;
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gallery-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+
+.gallery-detail {
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.gallery-detail:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.gallery-counter {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--bg-card) 78%, transparent);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  backdrop-filter: blur(8px);
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 40%;
+  z-index: 2;
+  display: inline-flex;
+  width: 2.5rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--bg-card) 20%, transparent);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--bg-card) 82%, transparent);
+  color: var(--text-main);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    background-color 150ms ease,
+    opacity 150ms ease;
+}
+
+.gallery-nav:hover {
+  background: var(--bg-elevated);
+}
+
+.gallery-nav:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.gallery-nav-previous {
+  left: 0.75rem;
+}
+
+.gallery-nav-next {
+  right: 0.75rem;
+}
+
+.gallery-nav svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.gallery-close {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .gallery-stage {
+    padding: 0.5rem;
+  }
+
+  .gallery-media {
+    max-height: 54vh;
+  }
+
+  .gallery-info {
+    max-height: 32vh;
+    padding-right: 3.75rem;
+  }
+
+  .gallery-nav {
+    width: 2.1rem;
+    height: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-nav,
+  .gallery-close {
+    transition: none;
+  }
+}
+
 /* 回到顶部：显隐状态由组件写入 data-visible，避免依赖工具类的产出顺序 */
 back-to-top {
   opacity: 0;

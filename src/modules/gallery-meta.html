@@ -1,0 +1,44 @@
+<th:block th:fragment="meta(photo)">
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and not #strings.isEmpty(photo.exif.model)}"
+    th:text="${photo.exif.model}"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and not #strings.isEmpty(photo.exif.lensModel)}"
+    th:text="${photo.exif.lensModel}"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and photo.exif.fNumber != null}"
+    th:text="|f/${photo.exif.fNumber}|"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and not #strings.isEmpty(photo.exif.exposureTime)}"
+    th:text="${photo.exif.exposureTime}"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and photo.exif.iso != null}"
+    th:text="|ISO ${photo.exif.iso}|"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and photo.exif.focalLength != null}"
+    th:text="|${photo.exif.focalLength}mm|"
+  ></span>
+  <span
+    class="hidden"
+    data-gallery-meta
+    th:if="${photo.exif != null and photo.exif.dateTimeOriginal != null}"
+    th:text="${#dates.format(photo.exif.dateTimeOriginal, 'yyyy-MM-dd HH:mm')}"
+  ></span>
+</th:block>

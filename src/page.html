@@ -20,10 +20,11 @@
     </section>
   </template>
   <section
-    class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[1fr_18rem] lg:px-6"
-    th:classappend="${theme.config.layout.content_header} and ${not #strings.isEmpty(singlePage.spec.cover)} ? '!-mt-20' : ''"
+    class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 lg:px-6"
+    th:with="showSidebar=${theme.config.sidebar.show_on_page ?: false}"
+    th:classappend="|${theme.config.layout.content_header and not #strings.isEmpty(singlePage.spec.cover) ? '!-mt-20' : ''} ${showSidebar ? 'md:grid-cols-[1fr_18rem]' : ''}|"
   >
-    <div class="z-0 min-w-0">
+    <div class="z-0 min-w-0" th:classappend="${showSidebar ? '' : 'mx-auto w-full max-w-4xl'}">
       <div class="bg-surface-card rounded-xl p-4">
         <div class="flex items-center justify-between">
           <div class="inline-flex items-center justify-start gap-2">
@@ -101,11 +102,16 @@
           th:text="${singlePage.spec.title}"
         ></h1>
 
-        <article
-          class="!max-w-none break-words"
-          th:classappend="${theme.config.post.content_style == 'github' ? 'markdown-body' : 'tailwind-typography'}"
-          th:utext="${singlePage.content.content}"
-        ></article>
+        <image-gallery
+          data-gallery-content
+          th:attr="data-dialog-label=#{fragment.gallery.title},data-close-label=#{fragment.lightbox.close},data-previous-label=#{fragment.gallery.previous},data-next-label=#{fragment.gallery.next},data-detail-label=#{fragment.gallery.detail}"
+        >
+          <article
+            class="!max-w-none break-words"
+            th:classappend="${theme.config.post.content_style == 'github' ? 'markdown-body' : 'tailwind-typography'}"
+            th:utext="${singlePage.content.content}"
+          ></article>
+        </image-gallery>
         <hr th:if="${haloCommentEnabled}" class="my-10 dark:border-slate-700" />
         <div id="comment" th:if="${haloCommentEnabled}">
           <h2 class="mb-2 text-base font-medium text-gray-900 dark:text-slate-50" th:text="#{common.comment}"></h2>
@@ -113,6 +119,8 @@
         </div>
       </div>
     </div>
-    <th:block th:replace="~{modules/sidebar :: sidebar(prepend = null)}" />
+    <th:block th:if="${showSidebar}">
+      <th:block th:replace="~{modules/sidebar :: sidebar(prepend = null)}" />
+    </th:block>
   </section>
 </include>

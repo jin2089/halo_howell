@@ -201,12 +201,17 @@
           </button>
           <div class="toc mt-3 max-h-64 overflow-auto" x-show="tocOpen" x-cloak></div>
         </div>
-        <article
-          id="content"
-          class="!max-w-none break-words"
-          th:classappend="${theme.config.post.content_style == 'github' ? 'markdown-body' : 'tailwind-typography'}"
-          th:utext="${post.content.content}"
-        ></article>
+        <image-gallery
+          data-gallery-content
+          th:attr="data-dialog-label=#{fragment.gallery.title},data-close-label=#{fragment.lightbox.close},data-previous-label=#{fragment.gallery.previous},data-next-label=#{fragment.gallery.next},data-detail-label=#{fragment.gallery.detail}"
+        >
+          <article
+            id="content"
+            class="!max-w-none break-words"
+            th:classappend="${theme.config.post.content_style == 'github' ? 'markdown-body' : 'tailwind-typography'}"
+            th:utext="${post.content.content}"
+          ></article>
+        </image-gallery>
         <div
           class="mt-10 flex flex-col sm:flex-row sm:justify-between"
           th:if="${postDisplay?.navigation ?: true}"
