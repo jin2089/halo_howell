@@ -40,143 +40,75 @@
       </div>
     </div>
     <div class="z-0 min-w-0" th:classappend="${(tocMode == 'left' or tocMode == 'both') ? ' xl:col-start-2' : ''}">
-      <div x-data="upvote('post','content.halo.run','posts')" class="bg-surface-card rounded-xl p-4">
-        <div
-          th:attr="x-data=|{name:'${post.metadata.name}'}|"
-          class="flex flex-col items-center justify-between gap-2 sm:flex-row"
-        >
-          <div class="flex w-full items-center justify-start gap-2">
-            <a
-              th:unless="${#strings.isEmpty(post.owner.avatar)}"
-              th:href="@{${post.owner.permalink}}"
-              th:title="${post.owner.displayName}"
-            >
-              <img th:src="${post.owner.avatar}" class="size-10 rounded-full" th:alt="${post.owner.displayName}" />
-            </a>
-            <div class="flex flex-col gap-0.5">
-              <a
-                th:href="@{${post.owner.permalink}}"
-                th:title="${post.owner.displayName}"
-                class="text-sm font-semibold text-gray-900 hover:text-gray-600 dark:text-slate-100 dark:hover:text-slate-200"
-                th:text="${post.owner.displayName}"
-              ></a>
-              <div class="flex items-center gap-2 text-xs font-light text-gray-600 dark:text-slate-100">
-                <span
-                  th:if="${postDisplay?.publish_time ?: true}"
-                  th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"
-                ></span>
-                <span
-                  th:if="${(postDisplay?.publish_time ?: true) and (postDisplay?.visit ?: true)}"
-                  class="text-gray-300 dark:text-slate-200"
-                  >/</span
-                >
-                <span
-                  th:if="${postDisplay?.visit ?: true}"
-                  th:text="#{common.visitCount(${post.stats?.visit ?:0})}"
-                ></span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-row items-center gap-1.5 self-end">
-            <div
-              sec:authorize="isAuthenticated()"
-              th:attr="x-data=|uiPermission('${#authentication.name}','system:posts:manage')|"
-              class="flex items-center justify-between"
-              id="edit-button"
-            >
-              <template x-if="shouldDisplay">
-                <a
-                  th:href="|/console/posts/editor?name=${post.metadata.name}&returnToView=true|"
-                  class="bg-surface-elevated inline-flex items-center justify-center gap-1 rounded-md border border-gray-200 px-4 py-1 text-sm leading-6 font-medium whitespace-nowrap text-gray-600 shadow-xs hover:bg-gray-50 focus:shadow-none focus:outline-hidden dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white"
-                >
-                  <span class="i-tabler-edit text-lg transition-all group-hover:-translate-x-1"></span>
-                  <span th:text="#{common.edit}"></span>
-                </a>
-              </template>
-            </div>
-            <div
-              th:if="${postDisplay?.upvote ?: (theme.config.post.show_upvote_button ?: true)}"
-              @click="handleUpvote(name)"
-              class="group inline-flex cursor-pointer items-center rounded-lg"
-            >
-              <div
-                class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
-              >
-                <div
-                  class="i-tabler-heart group-hover:text-danger-600 text-lg text-gray-600 dark:text-slate-500"
-                  x-show="!upvoted(name)"
-                  x-cloak
-                ></div>
-                <div class="i-tabler-heart-filled text-danger-600 text-lg" x-show="upvoted(name)" x-cloak></div>
-              </div>
-              <span
-                th:attr="data-upvote-post-name=${post.metadata.name}"
-                class="group-hover:text-danger-600 text-sm text-gray-600 dark:text-slate-500"
-                th:text="${post.stats?.upvote ?:0}"
-              ></span>
-            </div>
-            <a
-              th:if="${haloCommentEnabled}"
-              href="#comment"
-              class="group inline-flex cursor-pointer items-center gap-0.5 rounded-lg"
-            >
-              <div
-                class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
-              >
-                <div
-                  class="i-tabler-message-circle group-hover:text-primary-500 text-lg text-gray-600 dark:text-slate-500"
-                ></div>
-              </div>
-              <span
-                class="group-hover:text-primary-500 text-sm text-gray-600 dark:text-slate-500"
-                th:text="${post.stats?.comment ?:0}"
-              ></span>
-            </a>
-
-            <div
-              th:if="${postDisplay?.share ?: (theme.config.post.show_share_button ?: true)}"
-              th:attr="x-data=|share(${theme.config.post.share_item_ids})|"
-              class="group inline-flex cursor-pointer items-center gap-0.5 rounded-lg"
-              @click="shareModal = true"
-            >
-              <div
-                class="inline-flex items-center justify-center rounded-full p-2 transition-all group-hover:bg-gray-100 dark:group-hover:bg-slate-700"
-              >
-                <div
-                  class="i-tabler-share group-hover:text-success-500 text-lg text-gray-600 dark:text-slate-500"
-                ></div>
-              </div>
-              <th:block th:replace="~{modules/share-modal}" />
-            </div>
-          </div>
-        </div>
-        <h1
-          th:if="${#strings.isEmpty(post.spec.cover)} or ${theme.config.post.title_position == 'content'}  or ${not theme.config.layout.content_header}"
-          class="vt-post-title mt-3 text-3xl font-medium dark:text-slate-50"
-          th:text="${post.spec.title}"
-        ></h1>
-        <div
-          th:if="${(postDisplay?.categories ?: true) and not #lists.isEmpty(post.categories)}"
-          class="my-3 flex flex-wrap items-center gap-2"
-        >
-          <span class="i-tabler-folder text-base text-gray-500 dark:text-slate-400"></span>
-          <a
-            th:each="category : ${post.categories}"
-            th:href="@{${category.status.permalink}}"
-            th:title="${category.spec.displayName}"
-            th:text="${category.spec.displayName}"
-            class="cursor-pointer text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-50"
-          ></a>
-        </div>
-        <div th:if="${(postDisplay?.tags ?: true) and not #lists.isEmpty(post.tags)}" class="my-3 flex flex-wrap gap-2">
-          <a
-            th:each="tag : ${post.tags}"
-            th:href="@{${tag.status.permalink}}"
-            th:title="${tag.spec.displayName}"
-            th:text="|#${tag.spec.displayName}|"
-            class="cursor-pointer text-sm text-gray-600 italic hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-500"
+      <div
+        th:attr="data-post-name=${post.metadata.name},data-share-ids=${theme.config.post.share_item_ids != null ? #strings.listJoin(theme.config.post.share_item_ids, ',') : ''}"
+        x-data="Object.assign(upvote('post','content.halo.run','posts'), share($el.dataset.shareIds ? $el.dataset.shareIds.split(',') : []), { name: $el.dataset.postName })"
+        class="bg-surface-card rounded-xl p-4"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h1
+            th:if="${#strings.isEmpty(post.spec.cover)} or ${theme.config.post.title_position == 'content'} or ${not theme.config.layout.content_header}"
+            class="vt-post-title text-3xl font-bold break-all dark:text-slate-50"
+            th:text="${post.spec.title}"
+          ></h1>
+          <div
+            sec:authorize="isAuthenticated()"
+            th:attr="x-data=|uiPermission('${#authentication.name}','system:posts:manage')|"
+            class="ml-auto flex items-center"
+            id="edit-button"
           >
+            <template x-if="shouldDisplay">
+              <a
+                th:href="|/console/posts/editor?name=${post.metadata.name}&returnToView=true|"
+                th:aria-label="#{common.edit}"
+                th:title="#{common.edit}"
+                class="inline-flex size-9 items-center justify-center rounded-full text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+              >
+                <span class="i-tabler-edit text-xl"></span>
+              </a>
+            </template>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600 dark:text-slate-300">
+          <a
+            th:href="@{${post.owner.permalink}}"
+            th:title="${post.owner.displayName}"
+            class="inline-flex min-w-0 items-center gap-1.5 font-medium text-gray-800 transition-colors hover:text-gray-900 dark:text-slate-100 dark:hover:text-white"
+          >
+            <img
+              th:if="${not #strings.isEmpty(post.owner.avatar)}"
+              th:src="${post.owner.avatar}"
+              class="size-6 rounded-full"
+              th:alt="${post.owner.displayName}"
+            />
+            <span class="truncate" th:text="${post.owner.displayName}"></span>
           </a>
+          <span
+            th:if="${postDisplay?.publish_time ?: true}"
+            class="inline-flex items-center gap-1"
+            th:title="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"
+          >
+            <span class="i-tabler-calendar text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <span th:text="#{common.publishedOn(${#dates.format(post.spec.publishTime,'yyyy-MM-dd')})}"></span>
+          </span>
+          <span th:if="${postDisplay?.visit ?: true}" class="inline-flex items-center gap-1">
+            <span class="i-tabler-eye text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <span th:text="#{common.visitCount(${post.stats?.visit ?:0})}"></span>
+          </span>
+          <div
+            th:if="${(postDisplay?.categories ?: true) and not #lists.isEmpty(post.categories)}"
+            class="inline-flex flex-wrap items-center gap-1"
+          >
+            <span class="i-tabler-folder text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+            <a
+              th:each="category : ${post.categories}"
+              th:href="@{${category.status.permalink}}"
+              th:title="${category.spec.displayName}"
+              th:text="${category.spec.displayName}"
+              class="cursor-pointer transition-colors hover:text-gray-900 dark:hover:text-slate-50"
+            ></a>
+          </div>
         </div>
         <div
           th:if="${tocMode == 'inline' or tocMode == 'both'}"
@@ -212,6 +144,88 @@
             th:utext="${post.content.content}"
           ></article>
         </image-gallery>
+
+        <div
+          th:if="${(postDisplay?.tags ?: true) and not #lists.isEmpty(post.tags)}"
+          class="mt-6 flex flex-wrap items-center gap-2"
+        >
+          <span class="i-tabler-hash text-sm text-gray-400 dark:text-slate-500" aria-hidden="true"></span>
+          <a
+            th:each="tag : ${post.tags}"
+            th:href="@{${tag.status.permalink}}"
+            th:title="${tag.spec.displayName}"
+            class="bg-primary-soft text-primary inline-flex items-center gap-x-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all hover:opacity-80 dark:hover:opacity-90"
+          >
+            <span th:text="|#${tag.spec.displayName}|"></span>
+            <sup th:text="${tag.postCount ?: 0}"></sup>
+          </a>
+        </div>
+
+        <div
+          th:if="${(postDisplay?.upvote ?: (theme.config.post.show_upvote_button ?: true)) or haloCommentEnabled or (postDisplay?.share ?: (theme.config.post.show_share_button ?: true))}"
+          class="sticky bottom-10 z-30 mt-8 flex justify-center"
+        >
+          <ul
+            class="bg-surface-card flex h-12 items-center gap-2 rounded-full border border-gray-200 px-2 py-1.5 shadow-lg dark:border-slate-700"
+          >
+            <li
+              th:if="${postDisplay?.upvote ?: (theme.config.post.show_upvote_button ?: true)}"
+              class="inline-flex h-full"
+            >
+              <button
+                type="button"
+                @click="handleUpvote(name)"
+                :aria-pressed="upvoted(name).toString()"
+                th:aria-label="#{fragment.postActions.upvote}"
+                th:title="#{fragment.postActions.upvote}"
+                class="group hover:text-danger-600 dark:hover:text-danger-400 inline-flex h-full cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 text-gray-500 transition-all hover:bg-gray-100 dark:text-slate-400 dark:hover:bg-slate-700"
+              >
+                <span class="i-tabler-heart text-lg" x-show="!upvoted(name)" x-cloak aria-hidden="true"></span>
+                <span
+                  class="i-tabler-heart-filled text-danger-600 text-lg"
+                  x-show="upvoted(name)"
+                  x-cloak
+                  aria-hidden="true"
+                ></span>
+                <span
+                  class="text-sm"
+                  th:attr="data-upvote-post-name=${post.metadata.name}"
+                  th:text="${post.stats?.upvote ?: 0}"
+                ></span>
+              </button>
+            </li>
+            <li th:if="${haloCommentEnabled}" class="inline-flex h-full">
+              <a
+                href="#comment"
+                th:aria-label="#{common.comment}"
+                th:title="#{common.comment}"
+                class="group hover:text-primary-500 dark:hover:text-primary-400 inline-flex h-full items-center gap-1.5 rounded-full px-2 text-gray-500 transition-all hover:bg-gray-100 dark:text-slate-400 dark:hover:bg-slate-700"
+              >
+                <span class="i-tabler-message-circle text-lg" aria-hidden="true"></span>
+                <span class="text-sm" th:text="${post.stats?.comment ?: 0}"></span>
+              </a>
+            </li>
+            <li
+              th:if="${postDisplay?.share ?: (theme.config.post.show_share_button ?: true)}"
+              class="inline-flex h-full"
+            >
+              <button
+                type="button"
+                @click="shareModal = true"
+                th:aria-label="#{fragment.shareModal.title}"
+                th:title="#{fragment.shareModal.title}"
+                class="group hover:text-success-600 dark:hover:text-success-500 inline-flex h-full cursor-pointer items-center justify-center rounded-full px-2 text-gray-500 transition-all hover:bg-gray-100 dark:text-slate-400 dark:hover:bg-slate-700"
+              >
+                <span class="i-tabler-share text-lg" aria-hidden="true"></span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <th:block th:if="${postDisplay?.share ?: (theme.config.post.show_share_button ?: true)}">
+          <th:block th:replace="~{modules/share-modal}" />
+        </th:block>
+
         <div
           class="mt-10 flex flex-col sm:flex-row sm:justify-between"
           th:if="${postDisplay?.navigation ?: true}"
