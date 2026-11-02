@@ -538,6 +538,7 @@ spec:
           key: style
           label: 页脚风格
           value: items
+          help: 开启「极简布局」时始终使用「自定义内容」页脚；关闭后才按此选项渲染风格一 / 风格二。
           options:
             - label: 风格一
               value: style_1
@@ -674,7 +675,7 @@ spec:
           if: "$get(style).value === 'items'"
           name: footer_items
           label: 页脚内容
-          help: 仅在「自定义内容」风格下生效，可按需增删和排序。
+          help: 在「自定义内容」风格和开启「极简布局」时生效，可按需增删和排序；ICP / 公安备案建议统一在「备案设置」中填写。
           value:
             - value: social_media
             - value: copyright
@@ -710,6 +711,7 @@ spec:
                 - $formkit: text
                   name: text
                   label: ICP 备案号
+                  help: 留空或在「备案设置」中已填写时，会优先使用备案设置中的号码。
             - $formkit: group
               if: "$value.value === 'gongan'"
               name: options
@@ -719,6 +721,7 @@ spec:
                 - $formkit: text
                   name: text
                   label: 公安联网备案号
+                  help: 留空或在「备案设置」中已填写时，会优先使用备案设置中的号码。
             - $formkit: group
               if: "$value.value === 'social_media'"
               name: options
@@ -794,9 +797,11 @@ spec:
         - $formkit: text
           name: icp_text
           label: ICP备案号
+          help: 例如：京ICP备2024000000号-1；填写后会在所有页脚风格（含极简布局）自动显示，无需再到「页脚内容」中添加。
         - $formkit: text
           name: gongan_text
           label: 公安联网备案号
+          help: 例如：京公网安备 11010502000000号；与 ICP 备案号一样在极简布局下自动显示。
     - group: plugin
       label: 插件集成
       formSchema:

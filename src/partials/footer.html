@@ -184,11 +184,17 @@
 </footer>
 
 <footer
-  th:if="${(theme.config.footer.style == 'items' or (theme.config.layout.minimal_layout ?: true)) and not #lists.isEmpty(theme.config.footer.footer_items)}"
+  th:if="${(theme.config.footer.style == 'items' or (theme.config.layout.minimal_layout ?: true))
+    and (not #lists.isEmpty(theme.config.footer.footer_items)
+      or not #strings.isEmpty(theme.config.beian?.icp_text)
+      or not #strings.isEmpty(theme.config.beian?.gongan_text))}"
   class="bg-surface-card mt-10 py-8"
 >
   <div class="mx-auto max-w-7xl px-4 lg:px-6">
-    <div class="space-y-2 text-center text-sm text-gray-500 dark:text-slate-300">
+    <div
+      class="space-y-2 text-center text-sm text-gray-500 dark:text-slate-300"
+      th:with="icpText=${theme.config.beian?.icp_text},gonganText=${theme.config.beian?.gongan_text}"
+    >
       <th:block th:each="item : ${theme.config.footer.footer_items}">
         <th:block th:if="${item.value == 'social_media'}">
           <th:block th:replace="~{modules/footer-items-social :: social(${item.options?.items})}" />
@@ -224,7 +230,7 @@
         </div>
 
         <span
-          th:if="${item.value == 'icp' and not #strings.isEmpty(item.options?.text)}"
+          th:if="${item.value == 'icp' and #strings.isEmpty(icpText) and not #strings.isEmpty(item.options?.text)}"
           class="inline-flex items-center justify-center gap-1"
         >
           <img th:src="@{/assets/images/icp.webp}" class="size-4" alt="ICP备案" loading="lazy" decoding="async" />
@@ -233,11 +239,13 @@
             class="inline-flex items-center gap-1 hover:underline"
             target="_blank"
             rel="noopener noreferrer"
-            th:text="${item.options.text}"
+            th:text="${item.options?.text}"
           ></a>
         </span>
 
-        <div th:if="${item.value == 'gongan' and not #strings.isEmpty(item.options?.text)}">
+        <div
+          th:if="${item.value == 'gongan' and #strings.isEmpty(gonganText) and not #strings.isEmpty(item.options?.text)}"
+        >
           <p class="flex items-center justify-center gap-1">
             <img th:src="@{/assets/images/gongan.png}" class="size-4" alt="公安备案" loading="lazy" decoding="async" />
             <a
@@ -246,11 +254,37 @@
               class="hover:underline"
               target="_blank"
               rel="noopener noreferrer"
-              th:text="${item.options.text}"
+              th:text="${item.options?.text}"
             ></a>
           </p>
         </div>
       </th:block>
+
+      <!-- 备案设置：所有页脚风格（含极简布局）统一生效；上面的 icp/gongan 条目仅作旧配置兜底 -->
+      <span th:if="${not #strings.isEmpty(icpText)}" class="inline-flex items-center justify-center gap-1">
+        <img th:src="@{/assets/images/icp.webp}" class="size-4" alt="ICP备案" loading="lazy" decoding="async" />
+        <a
+          href="https://beian.miit.gov.cn/"
+          class="inline-flex items-center gap-1 hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+          th:text="${icpText}"
+        ></a>
+      </span>
+
+      <div th:if="${not #strings.isEmpty(gonganText)}">
+        <p class="flex items-center justify-center gap-1">
+          <img th:src="@{/assets/images/gongan.png}" class="size-4" alt="公安备案" loading="lazy" decoding="async" />
+          <a
+            id="gongan-link-4"
+            href="https://beian.mps.gov.cn/#/query/webSearch"
+            class="hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            th:text="${gonganText}"
+          ></a>
+        </p>
+      </div>
     </div>
   </div>
 </footer>

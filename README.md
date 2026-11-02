@@ -1,8 +1,7 @@
 # Howell Theme
 
 基于 [theme-earth](https://github.com/halo-dev/theme-earth) 定制，并参考 [theme-earthquake](https://github.com/mufengyian/theme-earthquake) 视觉与交互的 Halo 2.0 个人博客主题，采用极简单栏、文字优先的页面排版。
-
-![Howell Theme](./screenshot.jpg)
+示例网站:
 
 ## 功能
 
@@ -15,11 +14,17 @@
 - 图库 EXIF、键盘操作与焦点管理
 - Open Graph、Twitter Card、Canonical 与 JSON-LD SEO 输出
 - 经典页脚与可排序的自定义页脚内容
+- 备案信息统一在「备案设置」维护，极简布局与经典页脚均会自动显示
 
 ## 使用方式
 
 1. 手动下载主题包并在 Console 的主题管理界面安装，安装方式可参考：<https://docs.halo.run/user-guide/themes>
 2. 在后台「主题」设置中启用并进行个性化配置。
+
+## 升级提示（1.23.1）
+
+- 修复「备案设置」在极简布局下不显示的问题：ICP / 公安备案号现在会在所有页脚风格（含极简布局的自定义页脚）下自动渲染。
+- 「页脚内容」中已填写的 ICP / 公安备案条目仍然兼容，但会优先使用「备案设置」中的号码。
 
 ## 升级提示（1.23.0）
 
