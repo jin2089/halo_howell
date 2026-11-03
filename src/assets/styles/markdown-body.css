@@ -58,6 +58,22 @@
   padding: 1rem;
 }
 
+/*
+ * 字体开关必须显式下沉到正文容器：
+ * github-markdown.css 在 .markdown-body 上写死了系统无衬线字体（特异性 0,1,0），
+ * 会盖掉 body 上的字体声明（0,0,1），导致「正文」看不出字体变化。
+ * 本文件晚于 @import 的 github-markdown.css，同特异性下后置胜出。
+ */
+body:is(.font-noto-sans-sc, .font-noto-serif-sc, .font-lxgw-wenkai) .markdown-body {
+  font-family: var(--body-font);
+}
+
+/* 楷体笔画细、字面偏小：正文 +1px 字号、行高放宽到 1.9，读起来更舒展 */
+body.font-lxgw-wenkai .markdown-body {
+  font-size: 17px;
+  line-height: 1.9;
+}
+
 .markdown-body table {
   border-collapse: collapse;
 }

@@ -1,0 +1,11 @@
+<!--
+  构建期专用：把主题入口与配色初始化脚本注入到 <head>。
+  放在 partials 目录是刻意的——partials 不会被插件 emit，
+  否则这个带 @/assets 引用的文件会变成产物里一个带 bundle 注入的废文件。
+  由 partials/base-head.html 与 layout.html 各自 include 一次（构建期展开，非运行时）。
+-->
+<script type="module" src="@/assets/main.ts"></script>
+<script type="module">
+  import { initColorScheme } from "@/assets/utils/color-scheme.ts";
+  initColorScheme(colorScheme, enableChangeColorScheme);
+</script>

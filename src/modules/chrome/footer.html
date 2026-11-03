@@ -1,0 +1,8 @@
+<!--
+  运行时外壳片段：复用真实页脚（含三种风格与 <halo:footer />）。
+  footer.html 有 3 个并列根元素，所以这里用 th:block 包成单一命名片段，
+  layout 侧通过 ~{modules/chrome/footer :: footer} 引用。
+-->
+<th:block th:fragment="footer">
+  <include src="../../partials/footer.html" />
+</th:block>

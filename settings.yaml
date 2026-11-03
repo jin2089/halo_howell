@@ -140,7 +140,17 @@ spec:
           name: enable_color_scheme_animation
           label: 切换配色动画
           value: false
-          help: 开启后切换配色时显示从点击位置扩散的圆形动画；系统开启「减少动态效果」时自动禁用。
+          help: 开启后切配色时从点击位置扩散同心涟漪；速度见「扩散速度」，系统开启「减少动态效果」时自动禁用。
+
+        - $formkit: number
+          if: "$get(enable_color_scheme_animation).value"
+          name: color_scheme_reveal_duration
+          label: 扩散速度
+          value: "700"
+          min: "300"
+          max: "1200"
+          step: "20"
+          help: 单位毫秒，数值越大扩散越慢。默认 700；调慢水纹更舒展，调快更利落。
 
         - $formkit: select
           name: accent_hue
@@ -167,6 +177,7 @@ spec:
         - $formkit: select
           name: font_family
           label: 字体
+          help: 思源黑体 / 思源宋体从 CDN 加载；霞鹜文楷字模随主题分发（SIL OFL 1.1），正文按字号与行高做了适配。
           value: system
           options:
             - label: 系统默认
@@ -175,7 +186,7 @@ spec:
               value: noto_sans_sc
             - label: Noto Serif SC 思源宋体
               value: noto_serif_sc
-            - label: 落霞孤鹜文楷
+            - label: 霞鹜文楷（LXGW WenKai）
               value: lxgw_wenkai
 
         - $formkit: select
@@ -797,11 +808,9 @@ spec:
         - $formkit: text
           name: icp_text
           label: ICP备案号
-          help: 例如：京ICP备2024000000号-1；填写后会在所有页脚风格（含极简布局）自动显示，无需再到「页脚内容」中添加。
         - $formkit: text
           name: gongan_text
           label: 公安联网备案号
-          help: 例如：京公网安备 11010502000000号；与 ICP 备案号一样在极简布局下自动显示。
     - group: plugin
       label: 插件集成
       formSchema:

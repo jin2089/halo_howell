@@ -23,11 +23,41 @@
   z-index: calc(var(--z-view-transition) + 1);
 }
 
-/* 配色切换期间暂停 Pjax 的 root 淡入淡出，只播放圆形裁剪动画。
-   header 已有 pjax.css 中的 site-header 名称，这里不再重复声明。 */
+/*
+ * 同心涟漪：给新快照套一层径向遮罩——实心圆内部已显影，波前留两条固定宽度的半透明凹槽；
+ * 凹槽随半径一起外推，旧配色在凹槽处透出，就形成一圈圈水纹。
+ * 半径 --vt-ripple-r 由 color-scheme.ts 注册并用 WAAPI 插值；未注册时该值非法，
+ * 整条 mask-image 会被丢弃，此时 JS 端已回退到 clip-path 单波方案，不会出现硬切。
+ */
+html.color-scheme-transitioning::view-transition-new(root) {
+  mask-image: radial-gradient(
+    circle at var(--vt-reveal-x, 50%) var(--vt-reveal-y, 50%),
+    #000 calc(var(--vt-ripple-r) - 30px),
+    rgb(0 0 0 / 35%) calc(var(--vt-ripple-r) - 30px),
+    rgb(0 0 0 / 35%) calc(var(--vt-ripple-r) - 20px),
+    #000 calc(var(--vt-ripple-r) - 20px),
+    #000 calc(var(--vt-ripple-r) - 12px),
+    rgb(0 0 0 / 35%) calc(var(--vt-ripple-r) - 12px),
+    rgb(0 0 0 / 35%) var(--vt-ripple-r),
+    transparent calc(var(--vt-ripple-r) + 2px)
+  );
+  mask-repeat: no-repeat;
+}
+
+/* 配色切换期间暂停 Pjax 的 root 淡入淡出，只播放自己的裁剪动画。 */
 html.color-scheme-transitioning::view-transition-old(*),
 html.color-scheme-transitioning::view-transition-new(*) {
   animation: none;
+}
+
+/*
+ * 配色扩散必须覆盖整页：header 与列表首卡默认带独立 view-transition-name，
+ * 会被单独截成快照层，root 的圆环永远盖不到它们（表现为「导航栏不参与扩散」）。
+ * 过渡期间临时摘掉名字，让它们并回 root 快照；类移除后自动恢复，不影响 Pjax 共享元素。
+ */
+html.color-scheme-transitioning #header-menu,
+html.color-scheme-transitioning .vt-post-title {
+  view-transition-name: none;
 }
 
 html {

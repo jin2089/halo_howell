@@ -9,5 +9,6 @@ declare global {
     SearchWidget: any;
     i18nResources: Record<string, string>;
     enableColorSchemeAnimation: boolean;
+    colorSchemeRevealDuration: number;
   }
 }

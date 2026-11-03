@@ -1,0 +1,8 @@
+<!--
+  运行时外壳片段：把真实导航栏复用给页面布局契约（templates/layout.html）。
+  header.html 只依赖 site / theme.config / menuFinder / pluginFinder，不涉及 post、singlePage，
+  因此可以在插件页上下文里安全渲染。构建期由插件内联，产物落在 templates/modules/chrome/header.html。
+-->
+<th:block th:fragment="header">
+  <include src="../../partials/header.html" />
+</th:block>

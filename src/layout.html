@@ -1,0 +1,43 @@
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:lang="${#locale.toLanguageTag}"
+  th:with="stylePreset = ${'theme-preset-' + (theme.config.style.style_preset ?: 'plain')}"
+  th:classappend="${stylePreset}"
+  th:fragment="html (head, content)"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
+    <!-- 调用方传入 head 时应自带 <title>，这里只在 head 为空时兜底站点标题，避免重复 -->
+    <title th:if="${head == null}" th:text="${site.title}"></title>
+
+    <th:block th:replace="~{modules/chrome/head-assets :: head-assets}" />
+
+    <th:block th:if="${head != null}">
+      <th:block th:replace="${head}" />
+    </th:block>
+
+    <include src="chrome-scripts.html" />
+    <!-- 插件页可能输出富文本，这里补上正文排版样式（prose + markdown-body） -->
+    <script type="module" src="@/assets/post.ts"></script>
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900"
+    th:with="fontClass = ${theme.config.style.font_family == 'noto_sans_sc' ? 'font-noto-sans-sc' : (theme.config.style.font_family == 'noto_serif_sc' ? 'font-noto-serif-sc' : (theme.config.style.font_family == 'lxgw_wenkai' ? 'font-lxgw-wenkai' : ''))}"
+    th:classappend="${fontClass}"
+  >
+    <a href="#pjax-container" class="skip-to-content" th:text="#{fragment.layout.skipToContent}">跳到正文</a>
+
+    <th:block th:replace="~{modules/chrome/header :: header}" />
+
+    <main id="pjax-container" tabindex="-1" class="outline-hidden">
+      <section class="mx-auto mt-8 mb-10 max-w-3xl px-4 lg:px-6">
+        <th:block th:replace="${content}" />
+      </section>
+    </main>
+
+    <th:block th:replace="~{modules/chrome/footer :: footer}" />
+  </body>
+</html>
