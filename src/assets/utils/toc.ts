@@ -145,6 +145,11 @@ const setActiveHeading = (id: string, tocLinks?: HTMLAnchorElement[]) => {
     return;
   }
 
+  // 悬停抽屉默认 visibility: hidden，此时不能把页面滚动到目录里的活动项。
+  if (window.getComputedStyle(container).visibility === "hidden") {
+    return;
+  }
+
   const linkRect = activeLink.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
   const linkVisibleInContainer = linkRect.top >= containerRect.top && linkRect.bottom <= containerRect.bottom;

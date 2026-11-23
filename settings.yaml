@@ -258,6 +258,11 @@ spec:
               value: inline
             - label: 左侧 + 移动端文内
               value: both
+        - $formkit: checkbox
+          name: toc_hover_expand
+          label: 左侧目录悬停展开
+          value: true
+          help: 开启后左侧目录默认收起为窄条，鼠标悬停、键盘聚焦时在正文左侧留白中浮出，不遮挡正文；关闭则目录常驻显示。文章页开启右侧边栏时会自动改用常驻目录。
         - $formkit: select
           name: navigation_scope
           label: 上一篇/下一篇范围
@@ -369,6 +374,11 @@ spec:
     - group: sidebar
       label: 侧边栏
       formSchema:
+        - $formkit: checkbox
+          name: show_on_post
+          label: 文章页显示侧边栏
+          value: false
+          help: 开启后，文章页会显示下方配置的小部件；关闭时正文居中显示，不再保留右侧空白列。
         - $formkit: checkbox
           name: show_on_page
           label: 页面显示侧边栏

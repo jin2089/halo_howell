@@ -4,25 +4,44 @@
     <script type="module" src="./assets/post.ts"></script>
   </template>
   <section
-    class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 md:grid-cols-[minmax(0,1fr)_18rem] lg:px-6"
-    th:with="tocMode = ${theme.config.post.toc_mode ?: 'both'}, postDisplay = ${theme.config.post.post_display}, titleOnCover = ${(theme.config.post.title_position ?: 'content') == 'cover' and not #strings.isEmpty(post.spec.cover)}"
-    th:classappend="${tocMode == 'left' or tocMode == 'both' ? 'xl:grid-cols-[14rem_minmax(0,1fr)_18rem]' : 'xl:grid-cols-[minmax(0,1fr)_18rem]'}"
+    class="mx-auto mt-6 grid max-w-7xl grid-cols-1 gap-6 px-4 lg:px-6"
+    th:with="tocMode = ${theme.config.post.toc_mode ?: 'both'}, hasHeadings = ${#strings.contains(post.content.content, '<h1') or #strings.contains(post.content.content, '<h2') or #strings.contains(post.content.content, '<h3') or #strings.contains(post.content.content, '<h4')}, showLeftToc = ${(tocMode == 'left' or tocMode == 'both') and hasHeadings}, showSidebar = ${(theme.config.sidebar.show_on_post ?: false) and (theme.config.sidebar.widgets != null and !#lists.isEmpty(theme.config.sidebar.widgets))}, tocHover = ${(theme.config.post.toc_hover_expand ?: true) and not showSidebar}, postDisplay = ${theme.config.post.post_display}, titleOnCover = ${(theme.config.post.title_position ?: 'content') == 'cover' and not #strings.isEmpty(post.spec.cover)}"
+    th:classappend="${showSidebar ? (showLeftToc ? (tocHover ? ' md:grid-cols-[minmax(0,1fr)_18rem] xl:grid-cols-[2.75rem_minmax(0,1fr)_18rem]' : ' md:grid-cols-[minmax(0,1fr)_18rem] xl:grid-cols-[14rem_minmax(0,1fr)_18rem]') : ' md:grid-cols-[minmax(0,1fr)_18rem]') : (showLeftToc ? (tocHover ? ' xl:grid-cols-[2.75rem_minmax(0,1fr)]' : ' xl:grid-cols-[14rem_minmax(0,1fr)]') : '')}"
   >
     <div
-      th:if="${tocMode == 'left' or tocMode == 'both'}"
-      class="toc-container hidden xl:col-start-1 xl:block xl:w-56 xl:shrink-0 xl:pt-8"
+      th:if="${showLeftToc}"
+      class="toc-container hidden xl:block xl:shrink-0 xl:pt-8"
+      th:classappend="${tocHover ? 'toc-hover xl:w-11' : 'xl:w-56'}"
     >
-      <div
-        class="bg-surface-card sticky top-24 rounded-xl border border-gray-200/80 p-4 shadow-sm transition-all duration-300 dark:border-slate-700"
-      >
-        <h2 class="inline-flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-slate-50">
-          <span class="i-tabler-list-tree text-primary-500 text-lg"></span>
-          <th:block th:text="#{page.post.toc}"></th:block>
-        </h2>
-        <div class="toc mt-2 max-h-[calc(100vh-8rem)] overflow-auto"></div>
+      <div class="sticky top-24">
+        <button
+          th:if="${tocHover}"
+          type="button"
+          aria-controls="post-toc-panel"
+          th:aria-label="#{page.post.toc}"
+          th:title="#{page.post.toc}"
+          class="bg-surface-card flex w-11 flex-col items-center gap-2 rounded-xl border border-gray-200/80 py-4 text-gray-500 shadow-sm transition-colors hover:text-gray-900 dark:border-slate-700 dark:text-slate-400 dark:hover:text-slate-50"
+        >
+          <span class="i-tabler-list-tree text-primary-500 text-lg" aria-hidden="true"></span>
+          <span class="toc-rail-label text-xs" th:text="#{page.post.toc}"></span>
+        </button>
+        <div
+          id="post-toc-panel"
+          class="bg-surface-card rounded-xl border border-gray-200/80 p-4 shadow-sm transition-all duration-300 dark:border-slate-700"
+          th:classappend="${tocHover ? 'toc-hover-panel' : ''}"
+        >
+          <h2 class="inline-flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-slate-50">
+            <span class="i-tabler-list-tree text-primary-500 text-lg"></span>
+            <th:block th:text="#{page.post.toc}"></th:block>
+          </h2>
+          <div class="toc mt-2 max-h-[calc(100vh-8rem)] overflow-auto"></div>
+        </div>
       </div>
     </div>
-    <div class="z-0 min-w-0" th:classappend="${(tocMode == 'left' or tocMode == 'both') ? ' xl:col-start-2' : ''}">
+    <div
+      class="z-0 min-w-0"
+      th:classappend="${showSidebar ? (showLeftToc ? 'xl:col-start-2' : '') : (showLeftToc ? 'mx-auto w-full max-w-4xl xl:col-start-2' : 'mx-auto w-full max-w-4xl')}"
+    >
       <div
         th:attr="data-post-name=${post.metadata.name},data-share-ids=${theme.config.post.share_item_ids != null ? #strings.listJoin(theme.config.post.share_item_ids, ',') : ''}"
         x-data="Object.assign(upvote('post','content.halo.run','posts'), share($el.dataset.shareIds ? $el.dataset.shareIds.split(',') : []), { name: $el.dataset.postName })"
@@ -109,7 +128,7 @@
           </div>
         </div>
         <div
-          th:if="${tocMode == 'inline' or tocMode == 'both'}"
+          th:if="${hasHeadings and (tocMode == 'inline' or tocMode == 'both')}"
           class="toc-container bg-surface-card my-5 rounded-xl p-4 shadow-sm"
           th:classappend="${tocMode == 'both' ? ' xl:hidden' : ''}"
           th:attr="x-data=|{ tocOpen: ${theme.config.post.expand_inline_toc ?: false} }|"
@@ -265,7 +284,7 @@
         </div>
       </div>
     </div>
-    <div th:classappend="${(tocMode == 'left' or tocMode == 'both') ? ' xl:col-start-3' : ''}">
+    <div th:if="${showSidebar}" th:classappend="${showLeftToc ? 'xl:col-start-3' : ''}">
       <th:block th:replace="~{modules/sidebar :: sidebar(prepend = null)}" />
     </div>
   </section>
